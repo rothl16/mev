@@ -1,0 +1,38 @@
+---
+title: "MEV_analysis_script"
+author: "Leopold Roth"
+date: "2024-03-05"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    theme: united
+    toc_float: true
+---
+
+# packages
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(psych)
+library(lavaan)
+library(easystats)
+library(semPlot)
+library(reshape2)
+library(misty)
+library(foreign)
+library(varhandle)
+library(car)
+library(eRm)
+library(tidyr)
+```
+
+```{r}
+MEV1_SA_Moralization_of_Effort_Project_1_South_Africa_March_5_2024_13_39 <- read_csv("testdata/MEV1_SA - Moralization of Effort - Project 1 - South Africa_March 5, 2024_13.39.csv",skip = 1)
+
+df <- as.data.frame(MEV1_SA_Moralization_of_Effort_Project_1_South_Africa_March_5_2024_13_39)
+```
+

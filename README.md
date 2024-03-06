@@ -5,4 +5,5 @@ This project aims to replicate and extend the findings of Celniker et al. (2023,
 
 
 # download Qualtrics
-download as excel with numeric output
+Export -> SPSS -> more options -> corresponding data
+This way, the data seems to be exported in the most convenient and parsimonious way for further processing
