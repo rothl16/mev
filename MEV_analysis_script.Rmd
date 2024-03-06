@@ -28,11 +28,11 @@ library(varhandle)
 library(car)
 library(eRm)
 library(tidyr)
+library(haven)
 ```
 
 ```{r}
-MEV1_SA_Moralization_of_Effort_Project_1_South_Africa_March_5_2024_13_39 <- read_csv("testdata/MEV1_SA - Moralization of Effort - Project 1 - South Africa_March 5, 2024_13.39.csv",skip = 1)
+df_ge <- read_csv("testdata/testdata_mev_GE.csv")
 
-df <- as.data.frame(MEV1_SA_Moralization_of_Effort_Project_1_South_Africa_March_5_2024_13_39)
 ```
 
