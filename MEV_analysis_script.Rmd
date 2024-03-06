@@ -31,8 +31,45 @@ library(tidyr)
 library(haven)
 ```
 
-```{r}
-df_ge <- read_csv("testdata/testdata_mev_GE.csv")
+# TODOs
+## important
+1. add language level to data cleaning function
+2. add residency filter to data cleaning function
 
+## less important
+1. understand why df_ne has one column less (SC0, unknown usage)
+
+#load data
+
+```{r}
+df_ge <- read_csv("testdata/testdata_mev_GE.csv") #Germany
+df_me <- read_csv("testdata/testdata_mev_ME.csv") #Mexico
+df_ne <- read_csv("testdata/testdata_mev_NE.csv") #Netherlands
+df_sa <- read_csv("testdata/testdata_mev_SA.csv") #South Africa
+```
+
+# apply exclusion criteria
+- didnt complete survey
+- language level < very good (x)
+- not resident in target country (x)
+- missed one of the two attention checks
+- too fast completion (> 3SD from mean)
+```{r}
+#define data cleaning function
+clean_data <- function(df, progress_threshold = 100, AC1_value = 7, AC2_value = 1) {
+  filtered_df <- df %>%
+    filter(Progress >= progress_threshold) %>% #Exclude if Progress is below threshold
+    filter(AC1 == AC1_value) %>% #Exclude if attention check 1 was missed
+    filter(AC2 == AC2_value) %>% #Exclude if attention check 2 was missed
+    filter(Duration__in_seconds > (mean(Duration__in_seconds, na.rm = TRUE) - 3 * sd(Duration__in_seconds, na.rm = TRUE))) #Exclude if time is 3SD below mean
+  
+  return(filtered_df)
+}
+
+#apply data cleaning function (CURRENTLY DEACTIVATED; BECAUSE RESPONSES ARE RANDOM)
+# df_ge <- clean_data(df_ge)
+# df_me <- clean_data(df_me)
+# df_ne <- clean_data(df_ne)
+# df_sa <- clean_data(df_sa)
 ```
 
