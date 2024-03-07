@@ -35,9 +35,14 @@ library(haven)
 ## important
 1. add language level to data cleaning function
 2. add residency filter to data cleaning function
+3. re-create netherlands data (currently only NA)
+4. name Age_Group in all studies the same (ge = Age_Group, e.g. _sa = AgeG)
+4.1 when solved, add back to reduction function
+5. look up Bayesian dependent t-test
+6. figure out beeswarm plot
+7. look up Bayesian model comparison for regressions
 
 ## less important
-1. understand why df_ne has one column less (SC0, unknown usage)
 
 #load data
 
@@ -55,21 +60,405 @@ df_sa <- read_csv("testdata/testdata_mev_SA.csv") #South Africa
 - missed one of the two attention checks
 - too fast completion (> 3SD from mean)
 ```{r}
-#define data cleaning function
-clean_data <- function(df, progress_threshold = 100, AC1_value = 7, AC2_value = 1) {
-  filtered_df <- df %>%
-    filter(Progress >= progress_threshold) %>% #Exclude if Progress is below threshold
-    filter(AC1 == AC1_value) %>% #Exclude if attention check 1 was missed
-    filter(AC2 == AC2_value) %>% #Exclude if attention check 2 was missed
-    filter(Duration__in_seconds > (mean(Duration__in_seconds, na.rm = TRUE) - 3 * sd(Duration__in_seconds, na.rm = TRUE))) #Exclude if time is 3SD below mean
-  
-  return(filtered_df)
-}
-
 #apply data cleaning function (CURRENTLY DEACTIVATED; BECAUSE RESPONSES ARE RANDOM)
 # df_ge <- clean_data(df_ge)
 # df_me <- clean_data(df_me)
 # df_ne <- clean_data(df_ne)
 # df_sa <- clean_data(df_sa)
 ```
+
+# prepare data
+## renaming and means
+
+```{r}
+#apply to dataframes
+df_ge <- preparation(df_ge)
+df_me <- preparation(df_me)
+#df_ne <- preparation(df_ne) need new data simulation
+df_sa <- preparation(df_sa)
+```
+
+## create differences scores
+this also filters out participants who thought that the low effort condition was more/equally effortful than the high effort condition
+```{r}
+#apply function to dataframes
+df_ge <- difference_scores(df_ge)
+df_me <- difference_scores(df_me)
+#df_ne <- difference_scores(df_ne)
+df_sa <- difference_scores(df_sa)
+```
+
+# reliabilities
+## core goodness
+### low effort
+
+```{r}
+psych::alpha(df_ge %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
+)))[[1]]
+psych::alpha(df_me %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
+)))[[1]]
+#psych::alpha(df_ne %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
+#)))[[1]]
+psych::alpha(df_sa %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
+)))[[1]]
+```
+
+### high effort
+
+```{r}
+psych::alpha(df_ge %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
+)))[[1]]
+psych::alpha(df_me %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
+)))[[1]]
+# psych::alpha(df_ne %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
+# )))[[1]]
+psych::alpha(df_sa %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
+)))[[1]]
+```
+
+## value commitment
+### low effort
+
+```{r}
+psych::alpha(df_ge %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
+psych::alpha(df_me %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
+# psych::alpha(df_ne %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
+psych::alpha(df_sa %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
+```
+
+### high effort
+
+```{r}
+psych::alpha(df_ge %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
+psych::alpha(df_me %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
+# psych::alpha(df_ne %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
+psych::alpha(df_sa %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
+```
+
+# prepare analysis
+## keep needed columns
+
+```{r}
+#apply function to dataframes
+df_ge <- reduction(df_ge)
+df_me <- reduction(df_me)
+#df_ne <- reduction(df_ne)
+df_sa <- reduction(df_sa)
+```
+
+## add country ID and create overall df
+
+```{r}
+#country ID
+df_ge$country <- rep("GE",nrow(df_ge))
+df_me$country <- rep("ME",nrow(df_me))
+#df_ne$country <- rep("NE",nrow(df_ne))
+df_sa$country <- rep("SA",nrow(df_sa))
+
+df_all <- rbind(df_ge,df_me,df_sa) #add df_ne, when new simulation completed
+```
+
+## demographic analysis
+
+```{r}
+#Age
+psych::describe(df_ge$Age)
+psych::describe(df_me$Age)
+#psych::describe(df_ne$Age)
+psych::describe(df_sa$Age)
+psych::describe(df_all$Age)
+
+#Gender
+table(df_ge$Gen)
+table(df_me$Gen)
+#table(df_ne$Gen)
+table(df_sa$Gen)
+table(df_all$Gen)
+```
+
+## descriptive: means
+get all descriptives of everything and filter for what is needed
+```{r}
+means_all <- rownames_as_column(psych::describe(df_all))
+means_ge <- rownames_as_column(psych::describe(df_ge))
+means_me <- rownames_as_column(psych::describe(df_me))
+#means_ne <- rownames_as_column(psych::describe(df_ne))
+means_sa <- rownames_as_column(psych::describe(df_sa))
+```
+
+# main analysis
+## comparisons: core goodness
+
+```{r}
+#all
+cg_all <- as.data.frame(report::report(t.test(df_all$core_good_lo, df_all$core_good_he)))
+cg_all <- cg_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Germany
+cg_ge <- as.data.frame(report::report(t.test(df_ge$core_good_lo, df_ge$core_good_he)))
+cg_ge <- cg_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Mexico
+cg_me <- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good_he)))
+cg_me <- cg_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Netherlands
+# cg_ne <- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he)))
+# cg_ne <- cg_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#South Africa
+cg_sa <- as.data.frame(report::report(t.test(df_sa$core_good_lo, df_sa$core_good_he)))
+cg_sa <- cg_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#combine results
+cg_results <- rbind(cg_all, cg_ge, cg_me, cg_sa) #ADD NE
+cg_results$target <- rep("core_goodness",nrow(cg_results)) #add column to mention DV
+rm(list=c("cg_all","cg_ge","cg_me","cg_sa")) #ADD NE; #removes non-needed dfs
+```
+
+## comparisons: value commitment
+
+```{r}
+#all
+vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_lo, df_all$value_comm_he)))
+vc_all <- vc_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Germany
+vc_ge <- as.data.frame(report::report(t.test(df_ge$value_comm_lo, df_ge$value_comm_he)))
+vc_ge <- vc_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Mexico
+vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_comm_he)))
+vc_me <- vc_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Netherlands
+# vc_ne <- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he)))
+# vc_ne <- vc_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#South Africa
+vc_sa <- as.data.frame(report::report(t.test(df_sa$value_comm_lo, df_sa$value_comm_he)))
+vc_sa <- vc_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#combine results
+vc_results <- rbind(vc_all, vc_ge, vc_me, vc_sa) #ADD NE
+vc_results$target <- rep("value_commitment",nrow(vc_results)) #add column to mention DV
+rm(list=c("vc_all","vc_ge","vc_me","vc_sa")) #ADD NE; #removes non-needed dfs
+```
+
+## comparisons: pay deservingness
+
+```{r}
+#all
+pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_lo, df_all$pay_deservingness_he)))
+pd_all <- pd_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Germany
+pd_ge <- as.data.frame(report::report(t.test(df_ge$pay_deservingness_lo, df_ge$pay_deservingness_he)))
+pd_ge <- pd_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Mexico
+pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$pay_deservingness_he)))
+pd_me <- pd_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Netherlands
+# pd_ne <- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he)))
+# pd_ne <- pd_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#South Africa
+pd_sa <- as.data.frame(report::report(t.test(df_sa$pay_deservingness_lo, df_sa$pay_deservingness_he)))
+pd_sa <- pd_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#combine results
+pd_results <- rbind(pd_all, pd_ge, pd_me, pd_sa) #ADD NE
+pd_results$target <- rep("pay_deservingness",nrow(pd_results)) #add column to mention DV
+rm(list=c("pd_all","pd_ge","pd_me","pd_sa")) #ADD NE; #removes non-needed dfs
+```
+
+## comparisons: warmth
+
+```{r}
+#all
+wa_all <- as.data.frame(report::report(t.test(df_all$warmth_lo, df_all$warmth_he)))
+wa_all <- wa_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Germany
+wa_ge <- as.data.frame(report::report(t.test(df_ge$warmth_lo, df_ge$warmth_he)))
+wa_ge <- wa_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Mexico
+wa_me <- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he)))
+wa_me <- wa_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Netherlands
+# wa_ne <- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he)))
+# wa_ne <- wa_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#South Africa
+wa_sa <- as.data.frame(report::report(t.test(df_sa$warmth_lo, df_sa$warmth_he)))
+wa_sa <- wa_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#combine results
+wa_results <- rbind(wa_all, wa_ge, wa_me, wa_sa) #ADD NE
+wa_results$target <- rep("warmth",nrow(wa_results)) #add column to mention DV
+rm(list=c("wa_all","wa_ge","wa_me","wa_sa")) #ADD NE; #removes non-needed dfs
+```
+
+## comparisons: competence
+
+```{r}
+#all
+co_all <- as.data.frame(report::report(t.test(df_all$competence_lo, df_all$competence_he)))
+co_all <- co_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Germany
+co_ge <- as.data.frame(report::report(t.test(df_ge$competence_lo, df_ge$competence_he)))
+co_ge <- co_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Mexico
+co_me <- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competence_he)))
+co_me <- co_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#Netherlands
+# co_ne <- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he)))
+# co_ne <- co_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#South Africa
+co_sa <- as.data.frame(report::report(t.test(df_sa$competence_lo, df_sa$competence_he)))
+co_sa <- co_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+
+#combine results
+co_results <- rbind(co_all, co_ge, co_me, co_sa) #ADD NE
+co_results$target <- rep("competence",nrow(co_results)) #add column to mention DV
+rm(list=c("co_all","co_ge","co_me","co_sa")) #ADD NE; #removes non-needed dfs
+```
+
+### combine t-test results
+
+```{r}
+#combine results
+comp_results <- rbind(cg_results,
+                      vc_results,
+                      pd_results,
+                      wa_results,
+                      co_results)
+
+#add names list
+samples <- c("global","germany","mexico","south_africa") #ADD NE
+comp_results$countries <- rep(samples,5)
+
+#remove non-needed objects
+rm(list = c("cg_results","vc_results","pd_results","wa_results","co_results","samples"))
+```
+
+## beeswarm plot
+This needs to be figured out
+```{r}
+
+```
+
+## predictions: core goodness
+
+```{r}
+#global samples
+m0 <- lm(core_good_diff ~ 1, data = df_all)
+m1 <- lm(core_good_diff ~ Age, data = df_all)
+m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#germany
+m0 <- lm(core_good_diff ~ 1, data = df_ge)
+m1 <- lm(core_good_diff ~ Age, data = df_ge)
+m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#mexico
+m0 <- lm(core_good_diff ~ 1, data = df_me)
+m1 <- lm(core_good_diff ~ Age, data = df_me)
+m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_me)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#netherlands
+# m0 <- lm(core_good_diff ~ 1, data = df_all)
+# m1 <- lm(core_good_diff ~ Age, data = df_all)
+# m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+# 
+# sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#south africa
+m0 <- lm(core_good_diff ~ 1, data = df_sa)
+m1 <- lm(core_good_diff ~ Age, data = df_sa)
+m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+```
+
+## predictions: value commitment
+
+```{r}
+#global samples
+m0 <- lm(value_comm_diff ~ 1, data = df_all)
+m1 <- lm(value_comm_diff ~ Age, data = df_all)
+m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#germany
+m0 <- lm(value_comm_diff ~ 1, data = df_ge)
+m1 <- lm(value_comm_diff ~ Age, data = df_ge)
+m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#mexico
+m0 <- lm(value_comm_diff ~ 1, data = df_me)
+m1 <- lm(value_comm_diff ~ Age, data = df_me)
+m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_me)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#netherlands
+# m0 <- lm(value_comm_diff ~ 1, data = df_all)
+# m1 <- lm(value_comm_diff ~ Age, data = df_all)
+# m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+# 
+# sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+#south africa
+m0 <- lm(value_comm_diff ~ 1, data = df_sa)
+m1 <- lm(value_comm_diff ~ Age, data = df_sa)
+m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+```
+
+## exploratory multi-level model
+
+```{r}
+#define country as factor
+df_all$country <- as.factor(df_all$country)
+
+#core goodness
+
+m0 <- lme4::lmer(core_good_diff ~ 1 + (1+Age|country), data = df_all)
+m1 <- lme4::lmer(core_good_diff ~ country * Age + (1+Age|country), data = df_all)
+m2 <- lme4::lmer(core_good_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|country), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+sjPlot::plot_model(m2)
+
+#value commitment
+
+m0 <- lme4::lmer(value_comm_diff ~ 1 + (1+Age|country), data = df_all)
+m1 <- lme4::lmer(value_comm_diff ~ country * Age + (1+Age|country), data = df_all)
+m2 <- lme4::lmer(value_comm_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|country), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+sjPlot::plot_model(m2)
+```
+
+
+
 
