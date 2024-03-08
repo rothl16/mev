@@ -33,11 +33,7 @@ library(haven)
 
 # TODOs
 ## important
-1. add language level to data cleaning function
 2. add residency filter to data cleaning function
-3. re-create netherlands data (currently only NA)
-4. name Age_Group in all studies the same (ge = Age_Group, e.g. _sa = AgeG)
-4.1 when solved, add back to reduction function
 5. look up Bayesian dependent t-test
 6. figure out beeswarm plot
 7. look up Bayesian model comparison for regressions
@@ -74,7 +70,7 @@ df_sa <- read_csv("testdata/testdata_mev_SA.csv") #South Africa
 #apply to dataframes
 df_ge <- preparation(df_ge)
 df_me <- preparation(df_me)
-#df_ne <- preparation(df_ne) need new data simulation
+df_ne <- preparation(df_ne)
 df_sa <- preparation(df_sa)
 ```
 
@@ -84,7 +80,7 @@ this also filters out participants who thought that the low effort condition was
 #apply function to dataframes
 df_ge <- difference_scores(df_ge)
 df_me <- difference_scores(df_me)
-#df_ne <- difference_scores(df_ne)
+df_ne <- difference_scores(df_ne)
 df_sa <- difference_scores(df_sa)
 ```
 
@@ -97,8 +93,8 @@ psych::alpha(df_ge %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch
 )))[[1]]
 psych::alpha(df_me %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
 )))[[1]]
-#psych::alpha(df_ne %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
-#)))[[1]]
+psych::alpha(df_ne %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
+)))[[1]]
 psych::alpha(df_sa %>% select(c(Ch_LoEf_3, Ch_LoEf_9, Ch_LoEf_11, Ch_LoEf_10, Ch_LoEf_13, Ch_LoEf_14
 )))[[1]]
 ```
@@ -110,8 +106,8 @@ psych::alpha(df_ge %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch
 )))[[1]]
 psych::alpha(df_me %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
 )))[[1]]
-# psych::alpha(df_ne %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
-# )))[[1]]
+psych::alpha(df_ne %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
+)))[[1]]
 psych::alpha(df_sa %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch_HiEf_13, Ch_HiEf_14
 )))[[1]]
 ```
@@ -122,7 +118,7 @@ psych::alpha(df_sa %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch
 ```{r}
 psych::alpha(df_ge %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
 psych::alpha(df_me %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
-# psych::alpha(df_ne %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
+psych::alpha(df_ne %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
 psych::alpha(df_sa %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_LoEf_4, Ch_LoEf_12, Ch_LoEf_7)))[[1]]
 ```
 
@@ -131,7 +127,7 @@ psych::alpha(df_sa %>% select(c(Ch_LoEf_1, Ch_LoEf_5, Ch_LoEf_15, Ch_LoEf_8, Ch_
 ```{r}
 psych::alpha(df_ge %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
 psych::alpha(df_me %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
-# psych::alpha(df_ne %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
+psych::alpha(df_ne %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
 psych::alpha(df_sa %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_HiEf_4, Ch_HiEf_12, Ch_HiEf_7)))[[1]]
 ```
 
@@ -142,7 +138,7 @@ psych::alpha(df_sa %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_
 #apply function to dataframes
 df_ge <- reduction(df_ge)
 df_me <- reduction(df_me)
-#df_ne <- reduction(df_ne)
+df_ne <- reduction(df_ne)
 df_sa <- reduction(df_sa)
 ```
 
@@ -152,7 +148,7 @@ df_sa <- reduction(df_sa)
 #country ID
 df_ge$country <- rep("GE",nrow(df_ge))
 df_me$country <- rep("ME",nrow(df_me))
-#df_ne$country <- rep("NE",nrow(df_ne))
+df_ne$country <- rep("NE",nrow(df_ne))
 df_sa$country <- rep("SA",nrow(df_sa))
 
 df_all <- rbind(df_ge,df_me,df_sa) #add df_ne, when new simulation completed
@@ -164,14 +160,14 @@ df_all <- rbind(df_ge,df_me,df_sa) #add df_ne, when new simulation completed
 #Age
 psych::describe(df_ge$Age)
 psych::describe(df_me$Age)
-#psych::describe(df_ne$Age)
+psych::describe(df_ne$Age)
 psych::describe(df_sa$Age)
 psych::describe(df_all$Age)
 
 #Gender
 table(df_ge$Gen)
 table(df_me$Gen)
-#table(df_ne$Gen)
+table(df_ne$Gen)
 table(df_sa$Gen)
 table(df_all$Gen)
 ```
@@ -182,7 +178,7 @@ get all descriptives of everything and filter for what is needed
 means_all <- rownames_as_column(psych::describe(df_all))
 means_ge <- rownames_as_column(psych::describe(df_ge))
 means_me <- rownames_as_column(psych::describe(df_me))
-#means_ne <- rownames_as_column(psych::describe(df_ne))
+means_ne <- rownames_as_column(psych::describe(df_ne))
 means_sa <- rownames_as_column(psych::describe(df_sa))
 ```
 
@@ -203,17 +199,17 @@ cg_me <- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good
 cg_me <- cg_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #Netherlands
-# cg_ne <- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he)))
-# cg_ne <- cg_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_ne <- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he)))
+cg_ne <- cg_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #South Africa
 cg_sa <- as.data.frame(report::report(t.test(df_sa$core_good_lo, df_sa$core_good_he)))
 cg_sa <- cg_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #combine results
-cg_results <- rbind(cg_all, cg_ge, cg_me, cg_sa) #ADD NE
+cg_results <- rbind(cg_all, cg_ge, cg_me, cg_ne, cg_sa)
 cg_results$target <- rep("core_goodness",nrow(cg_results)) #add column to mention DV
-rm(list=c("cg_all","cg_ge","cg_me","cg_sa")) #ADD NE; #removes non-needed dfs
+rm(list=c("cg_all","cg_ge","cg_me","cg_ne","cg_sa")) #removes non-needed dfs
 ```
 
 ## comparisons: value commitment
@@ -232,17 +228,17 @@ vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_co
 vc_me <- vc_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #Netherlands
-# vc_ne <- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he)))
-# vc_ne <- vc_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_ne <- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he)))
+vc_ne <- vc_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #South Africa
 vc_sa <- as.data.frame(report::report(t.test(df_sa$value_comm_lo, df_sa$value_comm_he)))
 vc_sa <- vc_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #combine results
-vc_results <- rbind(vc_all, vc_ge, vc_me, vc_sa) #ADD NE
+vc_results <- rbind(vc_all, vc_ge, vc_me, vc_ne, vc_sa)
 vc_results$target <- rep("value_commitment",nrow(vc_results)) #add column to mention DV
-rm(list=c("vc_all","vc_ge","vc_me","vc_sa")) #ADD NE; #removes non-needed dfs
+rm(list=c("vc_all","vc_ge","vc_me","vc_ne","vc_sa")) #removes non-needed dfs
 ```
 
 ## comparisons: pay deservingness
@@ -261,17 +257,17 @@ pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$p
 pd_me <- pd_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #Netherlands
-# pd_ne <- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he)))
-# pd_ne <- pd_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_ne <- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he)))
+pd_ne <- pd_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #South Africa
 pd_sa <- as.data.frame(report::report(t.test(df_sa$pay_deservingness_lo, df_sa$pay_deservingness_he)))
 pd_sa <- pd_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #combine results
-pd_results <- rbind(pd_all, pd_ge, pd_me, pd_sa) #ADD NE
+pd_results <- rbind(pd_all, pd_ge, pd_me, pd_ne,pd_sa)
 pd_results$target <- rep("pay_deservingness",nrow(pd_results)) #add column to mention DV
-rm(list=c("pd_all","pd_ge","pd_me","pd_sa")) #ADD NE; #removes non-needed dfs
+rm(list=c("pd_all","pd_ge","pd_me","pd_ne","pd_sa")) #removes non-needed dfs
 ```
 
 ## comparisons: warmth
@@ -290,17 +286,17 @@ wa_me <- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he)))
 wa_me <- wa_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #Netherlands
-# wa_ne <- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he)))
-# wa_ne <- wa_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_ne <- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he)))
+wa_ne <- wa_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #South Africa
 wa_sa <- as.data.frame(report::report(t.test(df_sa$warmth_lo, df_sa$warmth_he)))
 wa_sa <- wa_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #combine results
-wa_results <- rbind(wa_all, wa_ge, wa_me, wa_sa) #ADD NE
+wa_results <- rbind(wa_all, wa_ge, wa_me, wa_ne, wa_sa)
 wa_results$target <- rep("warmth",nrow(wa_results)) #add column to mention DV
-rm(list=c("wa_all","wa_ge","wa_me","wa_sa")) #ADD NE; #removes non-needed dfs
+rm(list=c("wa_all","wa_ge","wa_me","wa_ne","wa_sa")) #removes non-needed dfs
 ```
 
 ## comparisons: competence
@@ -319,17 +315,17 @@ co_me <- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competen
 co_me <- co_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #Netherlands
-# co_ne <- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he)))
-# co_ne <- co_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_ne <- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he)))
+co_ne <- co_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #South Africa
 co_sa <- as.data.frame(report::report(t.test(df_sa$competence_lo, df_sa$competence_he)))
 co_sa <- co_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
 
 #combine results
-co_results <- rbind(co_all, co_ge, co_me, co_sa) #ADD NE
+co_results <- rbind(co_all, co_ge, co_me, co_ne,co_sa)
 co_results$target <- rep("competence",nrow(co_results)) #add column to mention DV
-rm(list=c("co_all","co_ge","co_me","co_sa")) #ADD NE; #removes non-needed dfs
+rm(list=c("co_all","co_ge","co_me","co_ne","co_sa")) #removes non-needed dfs
 ```
 
 ### combine t-test results
@@ -343,7 +339,7 @@ comp_results <- rbind(cg_results,
                       co_results)
 
 #add names list
-samples <- c("global","germany","mexico","south_africa") #ADD NE
+samples <- c("global","germany","mexico","netherlands","south_africa")
 comp_results$countries <- rep(samples,5)
 
 #remove non-needed objects
@@ -381,11 +377,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
 #netherlands
-# m0 <- lm(core_good_diff ~ 1, data = df_all)
-# m1 <- lm(core_good_diff ~ Age, data = df_all)
-# m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
-# 
-# sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+m0 <- lm(core_good_diff ~ 1, data = df_all)
+m1 <- lm(core_good_diff ~ Age, data = df_all)
+m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
 #south africa
 m0 <- lm(core_good_diff ~ 1, data = df_sa)
@@ -420,11 +416,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
 #netherlands
-# m0 <- lm(value_comm_diff ~ 1, data = df_all)
-# m1 <- lm(value_comm_diff ~ Age, data = df_all)
-# m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
-# 
-# sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+m0 <- lm(value_comm_diff ~ 1, data = df_all)
+m1 <- lm(value_comm_diff ~ Age, data = df_all)
+m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+
+sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
 #south africa
 m0 <- lm(value_comm_diff ~ 1, data = df_sa)
