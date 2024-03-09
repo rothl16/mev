@@ -29,12 +29,11 @@ library(car)
 library(eRm)
 library(tidyr)
 library(haven)
+library(BayesFactor)
 ```
 
 # TODOs
 ## important
-2. add residency filter to data cleaning function
-5. look up Bayesian dependent t-test
 6. figure out beeswarm plot
 7. look up Bayesian model comparison for regressions
 
@@ -187,27 +186,32 @@ means_sa <- rownames_as_column(psych::describe(df_sa))
 
 ```{r}
 #all
-cg_all <- as.data.frame(report::report(t.test(df_all$core_good_lo, df_all$core_good_he)))
-cg_all <- cg_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_all <- as.data.frame(report::report(t.test(df_all$core_good_lo, df_all$core_good_he, paired = TRUE))) #this computes the paired t-test and saves the results as dataframe
+cg_all <- cg_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high) #this extracts the metrices of interest and binds them together
+cg_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1] #this computes the Bayes Factor of the test and binds it to the other data; this is done for all tests in the same manner
 
 #Germany
-cg_ge <- as.data.frame(report::report(t.test(df_ge$core_good_lo, df_ge$core_good_he)))
+cg_ge <- as.data.frame(report::report(t.test(df_ge$core_good_lo, df_ge$core_good_he, paired = TRUE)))
 cg_ge <- cg_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
 
 #Mexico
-cg_me <- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good_he)))
+cg_me <- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good_he, paired = TRUE)))
 cg_me <- cg_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
 
 #Netherlands
-cg_ne <- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he)))
+cg_ne <- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he, paired = TRUE)))
 cg_ne <- cg_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_ne$BF <- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
 
 #South Africa
-cg_sa <- as.data.frame(report::report(t.test(df_sa$core_good_lo, df_sa$core_good_he)))
+cg_sa <- as.data.frame(report::report(t.test(df_sa$core_good_lo, df_sa$core_good_he, paired = TRUE)))
 cg_sa <- cg_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+cg_sa$BF <- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
 
 #combine results
-cg_results <- rbind(cg_all, cg_ge, cg_me, cg_ne, cg_sa)
+cg_results <- bind_rows(cg_all, cg_ge, cg_me, cg_ne, cg_sa) #using more flexible dplyr function; rbind had trouble with row.names
 cg_results$target <- rep("core_goodness",nrow(cg_results)) #add column to mention DV
 rm(list=c("cg_all","cg_ge","cg_me","cg_ne","cg_sa")) #removes non-needed dfs
 ```
@@ -216,27 +220,32 @@ rm(list=c("cg_all","cg_ge","cg_me","cg_ne","cg_sa")) #removes non-needed dfs
 
 ```{r}
 #all
-vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_lo, df_all$value_comm_he)))
+vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_lo, df_all$value_comm_he, paired = TRUE)))
 vc_all <- vc_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
 
 #Germany
-vc_ge <- as.data.frame(report::report(t.test(df_ge$value_comm_lo, df_ge$value_comm_he)))
+vc_ge <- as.data.frame(report::report(t.test(df_ge$value_comm_lo, df_ge$value_comm_he, paired = TRUE)))
 vc_ge <- vc_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
 
 #Mexico
-vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_comm_he)))
+vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_comm_he, paired = TRUE)))
 vc_me <- vc_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
 
 #Netherlands
-vc_ne <- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he)))
+vc_ne <- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he, paired = TRUE)))
 vc_ne <- vc_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_ne$BF <- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
 
 #South Africa
-vc_sa <- as.data.frame(report::report(t.test(df_sa$value_comm_lo, df_sa$value_comm_he)))
+vc_sa <- as.data.frame(report::report(t.test(df_sa$value_comm_lo, df_sa$value_comm_he, paired = TRUE)))
 vc_sa <- vc_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+vc_sa$BF <- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
 
 #combine results
-vc_results <- rbind(vc_all, vc_ge, vc_me, vc_ne, vc_sa)
+vc_results <- bind_rows(vc_all, vc_ge, vc_me, vc_ne, vc_sa)
 vc_results$target <- rep("value_commitment",nrow(vc_results)) #add column to mention DV
 rm(list=c("vc_all","vc_ge","vc_me","vc_ne","vc_sa")) #removes non-needed dfs
 ```
@@ -245,27 +254,32 @@ rm(list=c("vc_all","vc_ge","vc_me","vc_ne","vc_sa")) #removes non-needed dfs
 
 ```{r}
 #all
-pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_lo, df_all$pay_deservingness_he)))
+pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_lo, df_all$pay_deservingness_he, paired = TRUE)))
 pd_all <- pd_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
 
 #Germany
-pd_ge <- as.data.frame(report::report(t.test(df_ge$pay_deservingness_lo, df_ge$pay_deservingness_he)))
+pd_ge <- as.data.frame(report::report(t.test(df_ge$pay_deservingness_lo, df_ge$pay_deservingness_he, paired = TRUE)))
 pd_ge <- pd_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
 
 #Mexico
-pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$pay_deservingness_he)))
+pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$pay_deservingness_he, paired = TRUE)))
 pd_me <- pd_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
 
 #Netherlands
-pd_ne <- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he)))
+pd_ne <- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he, paired = TRUE)))
 pd_ne <- pd_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_ne$BF <- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
 
 #South Africa
-pd_sa <- as.data.frame(report::report(t.test(df_sa$pay_deservingness_lo, df_sa$pay_deservingness_he)))
+pd_sa <- as.data.frame(report::report(t.test(df_sa$pay_deservingness_lo, df_sa$pay_deservingness_he, paired = TRUE)))
 pd_sa <- pd_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+pd_sa$BF <- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
 
 #combine results
-pd_results <- rbind(pd_all, pd_ge, pd_me, pd_ne,pd_sa)
+pd_results <- bind_rows(pd_all, pd_ge, pd_me, pd_ne,pd_sa)
 pd_results$target <- rep("pay_deservingness",nrow(pd_results)) #add column to mention DV
 rm(list=c("pd_all","pd_ge","pd_me","pd_ne","pd_sa")) #removes non-needed dfs
 ```
@@ -274,27 +288,32 @@ rm(list=c("pd_all","pd_ge","pd_me","pd_ne","pd_sa")) #removes non-needed dfs
 
 ```{r}
 #all
-wa_all <- as.data.frame(report::report(t.test(df_all$warmth_lo, df_all$warmth_he)))
+wa_all <- as.data.frame(report::report(t.test(df_all$warmth_lo, df_all$warmth_he, paired = TRUE)))
 wa_all <- wa_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
 
 #Germany
-wa_ge <- as.data.frame(report::report(t.test(df_ge$warmth_lo, df_ge$warmth_he)))
+wa_ge <- as.data.frame(report::report(t.test(df_ge$warmth_lo, df_ge$warmth_he, paired = TRUE)))
 wa_ge <- wa_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
 
 #Mexico
-wa_me <- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he)))
+wa_me <- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he, paired = TRUE)))
 wa_me <- wa_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
 
 #Netherlands
-wa_ne <- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he)))
+wa_ne <- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he, paired = TRUE)))
 wa_ne <- wa_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_ne$BF <- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
 
 #South Africa
-wa_sa <- as.data.frame(report::report(t.test(df_sa$warmth_lo, df_sa$warmth_he)))
+wa_sa <- as.data.frame(report::report(t.test(df_sa$warmth_lo, df_sa$warmth_he, paired = TRUE)))
 wa_sa <- wa_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+wa_sa$BF <- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
 
 #combine results
-wa_results <- rbind(wa_all, wa_ge, wa_me, wa_ne, wa_sa)
+wa_results <- bind_rows(wa_all, wa_ge, wa_me, wa_ne, wa_sa)
 wa_results$target <- rep("warmth",nrow(wa_results)) #add column to mention DV
 rm(list=c("wa_all","wa_ge","wa_me","wa_ne","wa_sa")) #removes non-needed dfs
 ```
@@ -303,27 +322,32 @@ rm(list=c("wa_all","wa_ge","wa_me","wa_ne","wa_sa")) #removes non-needed dfs
 
 ```{r}
 #all
-co_all <- as.data.frame(report::report(t.test(df_all$competence_lo, df_all$competence_he)))
+co_all <- as.data.frame(report::report(t.test(df_all$competence_lo, df_all$competence_he, paired = TRUE)))
 co_all <- co_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
 
 #Germany
-co_ge <- as.data.frame(report::report(t.test(df_ge$competence_lo, df_ge$competence_he)))
+co_ge <- as.data.frame(report::report(t.test(df_ge$competence_lo, df_ge$competence_he, paired = TRUE)))
 co_ge <- co_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
 
 #Mexico
-co_me <- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competence_he)))
+co_me <- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competence_he, paired = TRUE)))
 co_me <- co_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
 
 #Netherlands
-co_ne <- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he)))
+co_ne <- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he, paired = TRUE)))
 co_ne <- co_ne %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_ne$BF <- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
 
 #South Africa
-co_sa <- as.data.frame(report::report(t.test(df_sa$competence_lo, df_sa$competence_he)))
+co_sa <- as.data.frame(report::report(t.test(df_sa$competence_lo, df_sa$competence_he, paired = TRUE)))
 co_sa <- co_sa %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+co_sa$BF <- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
 
 #combine results
-co_results <- rbind(co_all, co_ge, co_me, co_ne,co_sa)
+co_results <- bind_rows(co_all, co_ge, co_me, co_ne,co_sa)
 co_results$target <- rep("competence",nrow(co_results)) #add column to mention DV
 rm(list=c("co_all","co_ge","co_me","co_ne","co_sa")) #removes non-needed dfs
 ```
@@ -332,7 +356,7 @@ rm(list=c("co_all","co_ge","co_me","co_ne","co_sa")) #removes non-needed dfs
 
 ```{r}
 #combine results
-comp_results <- rbind(cg_results,
+comp_results <- bind_rows(cg_results,
                       vc_results,
                       pd_results,
                       wa_results,
