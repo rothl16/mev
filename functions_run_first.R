@@ -67,6 +67,20 @@ reduction <- function(df){
   return(reduced_df)
 }
 
+extract_and_combine_rows <- function(df_list, row_index) {
+  # Extract the specific row from each dataframe, or a row of NA if the index is out of bounds
+  rows <- lapply(df_list, function(df) {
+    if(nrow(df) >= row_index) {
+      return(df[row_index, , drop = FALSE])
+    } else {
+      # Return a row of NAs with the same number of columns as the first dataframe in the list
+      return(data.frame(matrix(NA, ncol = ncol(df_list[[1]]), nrow = 1, dimnames = list(NULL, names(df_list[[1]])))))
+    }
+  })
+  # Combine the rows from all dataframes
+  do.call(rbind, rows)
+}
+
 plot_violin_with_means <- function(data, columns_to_pivot, y_label, plot_title = "") {
   # Pivot the data
   df_long <- pivot_longer(data, cols = columns_to_pivot, names_to = "group", values_to = "value")
