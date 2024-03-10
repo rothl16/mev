@@ -30,11 +30,12 @@ library(eRm)
 library(tidyr)
 library(haven)
 library(BayesFactor)
+library(stringr)
+library(patchwork)
 ```
 
 # TODOs
 ## important
-6. figure out beeswarm plot
 7. look up Bayesian model comparison for regressions
 
 ## less important
@@ -371,15 +372,11 @@ rm(list = c("cg_results","vc_results","pd_results","wa_results","co_results","sa
 ```
 
 ## beeswarm plot
-This needs to be figured out
+
 ```{r}
-library(stringr)
-library(patchwork)
+df_plot <- df_all #define df for plotting
 
-
-df_plot <- df_all
-
-df_plot <- df_plot %>%
+df_plot <- df_plot %>% #recode country for readbility
   mutate(country = case_when(
     country == "GE" ~ "Germany",
     country == "ME" ~ "Mexico",
@@ -388,68 +385,22 @@ df_plot <- df_plot %>%
     TRUE ~ country  # Default case to keep original values for other countries
   ))
 
+#apply function for restructuring and plotting data
+plot_cg <- plot_violin_with_means(df_plot, c("core_good_lo", "core_good_he"), "core goodness")
 
+plot_vc <- plot_violin_with_means(df_plot, c("value_comm_lo", "value_comm_he"), "value commitment")
 
-####################################################
+plot_pd <- plot_violin_with_means(df_plot, c("pay_deservingness_lo", "pay_deservingness_he"),"pay deservingness")
 
+plot_wa <- plot_violin_with_means(df_plot, c("warmth_lo", "warmth_he"), "warmth")
 
-###function doesnt work, do manually!
+plot_co <- plot_violin_with_means(df_plot, c("competence_lo", "competence_he"), "competence")
 
+combined_plot <- plot_cg / plot_vc / plot_pd / plot_wa / plot_co #combine plots
 
-####################################################
-plot_cg <- plot_violin_with_means(df_plot, c("core_good_lo", "core_good_he"), "country", "core goodness")
-
-plot_vc <- plot_violin_with_means(df_plot, c("value_comm_lo", "value_comm_he"), "country", "value commitment")
-
-plot_pd <- plot_violin_with_means(df_plot, c("pay_deservingness_lo", "pay_deservingness_he"), "country","pay deservingness")
-
-plot(plot_pd)
-
-plot_wa <- plot_violin_with_means(df_plot, c("warmth_lo", "warmth_he"), "country", "warmth")
-
-plot_co <- plot_violin_with_means(df_plot, c("competence_lo", "competence_he"), "country", "competence")
-
-
-
-combined_plot <- plot_cg / plot_vc / plot_pd / plot_wa / plot_co
-
-
-ggsave("combined_plot.png", combined_plot, width = 10, height = 12, dpi = 300)
-
-
+#ggsave("combined_plot.png", combined_plot, width = 10, height = 12, dpi = 300)
 ```
 
-```{r}
-df_long <- pivot_longer(df_plot, cols = c(pay_deservingness_he,pay_deservingness_lo),names_to = "group", values_to = "value")
-  
-  # Recode group based on '_he' and '_lo'
-df_long <- df_long %>%
-    mutate(group = case_when(
-      str_detect(group, "_he$") ~ "high",
-      str_detect(group, "_lo$") ~ "low",
-      TRUE ~ group  # Keeps the original value if none of the conditions match
-    ))
-  
-  # Calculate the mean values for each group and country
-  means_df <- df_long %>%
-    group_by(country, group) %>%
-    summarise(mean_value = mean(value), .groups = "drop")
-  
-  # Plot
-ggplot(df_long, aes(x = group, y = value, fill = group)) +
-    geom_violin() +
-    geom_point(data = means_df, aes(x = group, y = mean_value, group = group), color = "black", size = 14, shape = 95) +
-    facet_grid(~country) +
-    theme_classic() +
-    ylim(0,100) +
-    theme(legend.position = "none",
-          text = element_text(size = 14, color = "black"), # Base text size for the plot, increases all text size
-          axis.title = element_text(size = 16, color = "black"), # Axis titles
-          axis.text = element_text(size = 14, color = "black"), # Axis text (ticks)
-          plot.title = element_text(size = 20, color = "black", face = "bold"), # Plot title
-          strip.text = element_text(size = 14, color = "black"))
-  
-```
 
 
 
