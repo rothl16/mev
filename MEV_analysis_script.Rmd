@@ -35,10 +35,7 @@ library(patchwork)
 ```
 
 # TODOs
-## important
-7. look up Bayesian model comparison for regressions
-
-## less important
+add here, if something comes up
 
 #load data
 
@@ -401,13 +398,6 @@ combined_plot <- plot_cg / plot_vc / plot_pd / plot_wa / plot_co #combine plots
 #ggsave("combined_plot.png", combined_plot, width = 10, height = 12, dpi = 300)
 ```
 
-
-
-
-
-
-
-
 ## predictions: core goodness
 
 ```{r}
@@ -418,12 +408,18 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #germany
 m0 <- lm(core_good_diff ~ 1, data = df_ge)
 m1 <- lm(core_good_diff ~ Age, data = df_ge)
 m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
 
 #mexico
 m0 <- lm(core_good_diff ~ 1, data = df_me)
@@ -432,6 +428,9 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #netherlands
 m0 <- lm(core_good_diff ~ 1, data = df_all)
 m1 <- lm(core_good_diff ~ Age, data = df_all)
@@ -439,12 +438,18 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #south africa
 m0 <- lm(core_good_diff ~ 1, data = df_sa)
 m1 <- lm(core_good_diff ~ Age, data = df_sa)
 m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
 ```
 
 ## predictions: value commitment
@@ -457,12 +462,18 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #germany
 m0 <- lm(value_comm_diff ~ 1, data = df_ge)
 m1 <- lm(value_comm_diff ~ Age, data = df_ge)
 m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
 
 #mexico
 m0 <- lm(value_comm_diff ~ 1, data = df_me)
@@ -471,6 +482,9 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #netherlands
 m0 <- lm(value_comm_diff ~ 1, data = df_all)
 m1 <- lm(value_comm_diff ~ Age, data = df_all)
@@ -478,12 +492,18 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #south africa
 m0 <- lm(value_comm_diff ~ 1, data = df_sa)
 m1 <- lm(value_comm_diff ~ Age, data = df_sa)
 m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
+
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
 ```
 
 ## exploratory multi-level model
@@ -501,6 +521,9 @@ m2 <- lme4::lmer(core_good_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|countr
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 sjPlot::plot_model(m2)
 
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 #value commitment
 
 m0 <- lme4::lmer(value_comm_diff ~ 1 + (1+Age|country), data = df_all)
@@ -509,6 +532,9 @@ m2 <- lme4::lmer(value_comm_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|count
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 sjPlot::plot_model(m2)
+
+performance::test_bf(m0, m1) #BF linear vs. null model
+performance::test_bf(m1, m2) #BF quadratic vs linear model
 ```
 
 
