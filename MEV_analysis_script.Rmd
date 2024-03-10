@@ -37,6 +37,12 @@ library(patchwork)
 # TODOs
 add here, if something comes up
 
+# source functions from script
+this 'runs' the script functions_run_first.R and saves work to do it yourself/otherwise can't knit (create markdown)
+```{r, include=FALSE}
+source("functions_run_first.R", local = knitr::knit_global())
+```
+
 #load data
 
 ```{r}
