@@ -1903,27 +1903,27 @@ goodness</h2>
 <pre class="r"><code>#all
 cg_all &lt;- as.data.frame(report::report(t.test(df_all$core_good_lo, df_all$core_good_he, paired = TRUE))) #this computes the paired t-test and saves the results as dataframe
 cg_all &lt;- cg_all %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high) #this extracts the metrices of interest and binds them together
-cg_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1] #this computes the Bayes Factor of the test and binds it to the other data; this is done for all tests in the same manner
+cg_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[[1]] #this computes the Bayes Factor of the test and binds it to the other data; this is done for all tests in the same manner
 
 #Germany
 cg_ge &lt;- as.data.frame(report::report(t.test(df_ge$core_good_lo, df_ge$core_good_he, paired = TRUE)))
 cg_ge &lt;- cg_ge %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
+cg_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[[1]]
 
 #Mexico
 cg_me &lt;- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good_he, paired = TRUE)))
 cg_me &lt;- cg_me %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
+cg_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[[1]]
 
 #Netherlands
 cg_ne &lt;- as.data.frame(report::report(t.test(df_ne$core_good_lo, df_ne$core_good_he, paired = TRUE)))
 cg_ne &lt;- cg_ne %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
+cg_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[[1]]
 
 #South Africa
 cg_sa &lt;- as.data.frame(report::report(t.test(df_sa$core_good_lo, df_sa$core_good_he, paired = TRUE)))
 cg_sa &lt;- cg_sa %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
+cg_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[[1]]
 
 #combine results
 cg_results &lt;- bind_rows(cg_all, cg_ge, cg_me, cg_ne, cg_sa) #using more flexible dplyr function; rbind had trouble with row.names
@@ -1936,27 +1936,27 @@ commitment</h2>
 <pre class="r"><code>#all
 vc_all &lt;- as.data.frame(report::report(t.test(df_all$value_comm_lo, df_all$value_comm_he, paired = TRUE)))
 vc_all &lt;- vc_all %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
+vc_all$BF &lt;- as.data.frame(ttestBF(x = df_all$value_comm_lo, y = df_all$value_comm_he, paired = TRUE))[[1]]
 
 #Germany
 vc_ge &lt;- as.data.frame(report::report(t.test(df_ge$value_comm_lo, df_ge$value_comm_he, paired = TRUE)))
 vc_ge &lt;- vc_ge %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
+vc_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$value_comm_lo, y = df_ge$value_comm_he, paired = TRUE))[[1]]
 
 #Mexico
 vc_me &lt;- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_comm_he, paired = TRUE)))
 vc_me &lt;- vc_me %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
+vc_me$BF &lt;- as.data.frame(ttestBF(x = df_me$value_comm_lo, y = df_me$value_comm_he, paired = TRUE))[[1]]
 
 #Netherlands
 vc_ne &lt;- as.data.frame(report::report(t.test(df_ne$value_comm_lo, df_ne$value_comm_he, paired = TRUE)))
 vc_ne &lt;- vc_ne %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
+vc_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$value_comm_lo, y = df_ne$value_comm_he, paired = TRUE))[[1]]
 
 #South Africa
 vc_sa &lt;- as.data.frame(report::report(t.test(df_sa$value_comm_lo, df_sa$value_comm_he, paired = TRUE)))
 vc_sa &lt;- vc_sa %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
+vc_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$value_comm_lo, y = df_sa$value_comm_he, paired = TRUE))[[1]]
 
 #combine results
 vc_results &lt;- bind_rows(vc_all, vc_ge, vc_me, vc_ne, vc_sa)
@@ -1969,27 +1969,27 @@ deservingness</h2>
 <pre class="r"><code>#all
 pd_all &lt;- as.data.frame(report::report(t.test(df_all$pay_deservingness_lo, df_all$pay_deservingness_he, paired = TRUE)))
 pd_all &lt;- pd_all %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
+pd_all$BF &lt;- as.data.frame(ttestBF(x = df_all$pay_deservingness_lo, y = df_all$pay_deservingness_he, paired = TRUE))[[1]]
 
 #Germany
 pd_ge &lt;- as.data.frame(report::report(t.test(df_ge$pay_deservingness_lo, df_ge$pay_deservingness_he, paired = TRUE)))
 pd_ge &lt;- pd_ge %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
+pd_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$pay_deservingness_lo, y = df_ge$pay_deservingness_he, paired = TRUE))[[1]]
 
 #Mexico
 pd_me &lt;- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$pay_deservingness_he, paired = TRUE)))
 pd_me &lt;- pd_me %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
+pd_me$BF &lt;- as.data.frame(ttestBF(x = df_me$pay_deservingness_lo, y = df_me$pay_deservingness_he, paired = TRUE))[[1]]
 
 #Netherlands
 pd_ne &lt;- as.data.frame(report::report(t.test(df_ne$pay_deservingness_lo, df_ne$pay_deservingness_he, paired = TRUE)))
 pd_ne &lt;- pd_ne %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
+pd_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$pay_deservingness_lo, y = df_ne$pay_deservingness_he, paired = TRUE))[[1]]
 
 #South Africa
 pd_sa &lt;- as.data.frame(report::report(t.test(df_sa$pay_deservingness_lo, df_sa$pay_deservingness_he, paired = TRUE)))
 pd_sa &lt;- pd_sa %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
+pd_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$pay_deservingness_lo, y = df_sa$pay_deservingness_he, paired = TRUE))[[1]]
 
 #combine results
 pd_results &lt;- bind_rows(pd_all, pd_ge, pd_me, pd_ne,pd_sa)
@@ -2002,27 +2002,27 @@ warmth</h2>
 <pre class="r"><code>#all
 wa_all &lt;- as.data.frame(report::report(t.test(df_all$warmth_lo, df_all$warmth_he, paired = TRUE)))
 wa_all &lt;- wa_all %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
+wa_all$BF &lt;- as.data.frame(ttestBF(x = df_all$warmth_lo, y = df_all$warmth_he, paired = TRUE))[[1]]
 
 #Germany
 wa_ge &lt;- as.data.frame(report::report(t.test(df_ge$warmth_lo, df_ge$warmth_he, paired = TRUE)))
 wa_ge &lt;- wa_ge %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
+wa_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$warmth_lo, y = df_ge$warmth_he, paired = TRUE))[[1]]
 
 #Mexico
 wa_me &lt;- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he, paired = TRUE)))
 wa_me &lt;- wa_me %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
+wa_me$BF &lt;- as.data.frame(ttestBF(x = df_me$warmth_lo, y = df_me$warmth_he, paired = TRUE))[[1]]
 
 #Netherlands
 wa_ne &lt;- as.data.frame(report::report(t.test(df_ne$warmth_lo, df_ne$warmth_he, paired = TRUE)))
 wa_ne &lt;- wa_ne %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
+wa_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$warmth_lo, y = df_ne$warmth_he, paired = TRUE))[[1]]
 
 #South Africa
 wa_sa &lt;- as.data.frame(report::report(t.test(df_sa$warmth_lo, df_sa$warmth_he, paired = TRUE)))
 wa_sa &lt;- wa_sa %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
+wa_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$warmth_lo, y = df_sa$warmth_he, paired = TRUE))[[1]]
 
 #combine results
 wa_results &lt;- bind_rows(wa_all, wa_ge, wa_me, wa_ne, wa_sa)
@@ -2035,27 +2035,27 @@ competence</h2>
 <pre class="r"><code>#all
 co_all &lt;- as.data.frame(report::report(t.test(df_all$competence_lo, df_all$competence_he, paired = TRUE)))
 co_all &lt;- co_all %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_all$BF &lt;- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[1]
+co_all$BF &lt;- as.data.frame(ttestBF(x = df_all$competence_lo, y = df_all$competence_he, paired = TRUE))[[1]]
 
 #Germany
 co_ge &lt;- as.data.frame(report::report(t.test(df_ge$competence_lo, df_ge$competence_he, paired = TRUE)))
 co_ge &lt;- co_ge %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[1]
+co_ge$BF &lt;- as.data.frame(ttestBF(x = df_ge$competence_lo, y = df_ge$competence_he, paired = TRUE))[[1]]
 
 #Mexico
 co_me &lt;- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competence_he, paired = TRUE)))
 co_me &lt;- co_me %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_me$BF &lt;- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[1]
+co_me$BF &lt;- as.data.frame(ttestBF(x = df_me$competence_lo, y = df_me$competence_he, paired = TRUE))[[1]]
 
 #Netherlands
 co_ne &lt;- as.data.frame(report::report(t.test(df_ne$competence_lo, df_ne$competence_he, paired = TRUE)))
 co_ne &lt;- co_ne %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$core_good_lo, y = df_ne$core_good_he, paired = TRUE))[1]
+co_ne$BF &lt;- as.data.frame(ttestBF(x = df_ne$competence_lo, y = df_ne$competence_he, paired = TRUE))[[1]]
 
 #South Africa
 co_sa &lt;- as.data.frame(report::report(t.test(df_sa$competence_lo, df_sa$competence_he, paired = TRUE)))
 co_sa &lt;- co_sa %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$core_good_lo, y = df_sa$core_good_he, paired = TRUE))[1]
+co_sa$BF &lt;- as.data.frame(ttestBF(x = df_sa$competence_lo, y = df_sa$competence_he, paired = TRUE))[[1]]
 
 #combine results
 co_results &lt;- bind_rows(co_all, co_ge, co_me, co_ne,co_sa)
@@ -2075,12 +2075,47 @@ comp_results &lt;- bind_rows(cg_results,
 samples &lt;- c(&quot;global&quot;,&quot;germany&quot;,&quot;mexico&quot;,&quot;netherlands&quot;,&quot;south_africa&quot;)
 comp_results$countries &lt;- rep(samples,5)
 
+comp_results &lt;- comp_results %&gt;% #rounds all numeric variables to 3 decimals
+  mutate_if(is.numeric, round, digits = 3)
+
+#this makes the transfer to word easier
+##open excel, find/replace comma with point, copy, paste, correct format
+#writexl::write_xlsx(comp_results, &quot;t-results.xlsx&quot;)
+
 #remove non-needed objects
 rm(list = c(&quot;cg_results&quot;,&quot;vc_results&quot;,&quot;pd_results&quot;,&quot;wa_results&quot;,&quot;co_results&quot;,&quot;samples&quot;))</code></pre>
 </div>
 </div>
-<div id="beeswarm-plot" class="section level2" number="8.6">
-<h2><span class="header-section-number">8.6</span> beeswarm plot</h2>
+<div id="ease-extraction-of-means-and-sds" class="section level2" number="8.6">
+<h2><span class="header-section-number">8.6</span> ease extraction of
+means and sds</h2>
+<pre class="r"><code>#combine and extract means (sds) for tables
+df_list &lt;- list(means_all, means_ge,means_me,means_ne,means_sa) # Example list of dataframes
+
+target_rows &lt;- c(9, 18, #rows of interest
+                 10, 19,
+                 8, 17,
+                 2, 11,
+                 3, 12)
+
+# Initialize an empty dataframe to store the combined results
+combined_rows &lt;- data.frame()
+
+# Loop through each target row index
+for(row_index in target_rows) {
+  # Extract and combine the rows for the current index from all dataframes
+  combined_rows &lt;- rbind(combined_rows, extract_and_combine_rows(df_list, row_index))
+}
+
+combined_rows &lt;- combined_rows %&gt;% 
+  select(rowname,mean,sd) %&gt;% #keep only needed columns
+  mutate(mean_sd = paste0(round(mean, 2), &quot; (&quot;, round(sd, 2), &quot;)&quot;)) %&gt;% #round and combine in mean(sd) format
+  select(rowname,mean_sd) #select only needed columns
+
+#writexl::write_xlsx(combined_rows, &quot;means_t-results.xlsx&quot;)</code></pre>
+</div>
+<div id="beeswarm-plot" class="section level2" number="8.7">
+<h2><span class="header-section-number">8.7</span> beeswarm plot</h2>
 <pre class="r"><code>df_plot &lt;- df_all #define df for plotting
 
 df_plot &lt;- df_plot %&gt;% #recode country for readbility
@@ -2118,8 +2153,8 @@ combined_plot &lt;- plot_cg / plot_vc / plot_pd / plot_wa / plot_co #combine plo
 
 #ggsave(&quot;combined_plot.png&quot;, combined_plot, width = 10, height = 12, dpi = 300)</code></pre>
 </div>
-<div id="predictions-core-goodness" class="section level2" number="8.7">
-<h2><span class="header-section-number">8.7</span> predictions: core
+<div id="predictions-core-goodness" class="section level2" number="8.8">
+<h2><span class="header-section-number">8.8</span> predictions: core
 goodness</h2>
 <pre class="r"><code>#global samples
 m0 &lt;- lm(core_good_diff ~ 1, data = df_all)
@@ -3022,9 +3057,9 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
 <pre class="r"><code>#netherlands
-m0 &lt;- lm(core_good_diff ~ 1, data = df_all)
-m1 &lt;- lm(core_good_diff ~ Age, data = df_all)
-m2 &lt;- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+m0 &lt;- lm(core_good_diff ~ 1, data = df_ne)
+m1 &lt;- lm(core_good_diff ~ Age, data = df_ne)
+m2 &lt;- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_ne)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -3100,52 +3135,52 @@ std. p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04
+0.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05 – 0.13
+-0.09 – 0.30
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.09 – 0.09
+-0.18 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.409
+0.292
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.05
+-0.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
--0.29 – 0.19
+-0.57 – 0.37
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
--0.09 – 0.09
+-0.18 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-0.664
+0.663
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.13
+-0.24
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
--0.04
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
--0.41 – 0.66
+-1.29 – 0.81
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.17 – 0.10
+-0.25 – 0.31
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.638
+0.652
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.578
+0.826
 </td>
 </tr>
 <tr>
@@ -3166,16 +3201,16 @@ Age
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-0.04
+0.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
--0.00 – 0.00
+-0.00 – 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
--0.05 – 0.13
+-0.09 – 0.26
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-0.406
+0.337
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
 </td>
@@ -3215,22 +3250,22 @@ Age [1st degree]
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
--0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.04
+0.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
--0.02 – 0.01
+-0.03 – 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.05 – 0.12
+-0.09 – 0.27
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.565
+0.648
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.435
+0.327
 </td>
 </tr>
 <tr>
@@ -3258,22 +3293,22 @@ Age [2nd degree]
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.00
+-0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.04
+-0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
 -0.00 – 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.06 – 0.14
+-0.25 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.458
+0.775
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.458
+0.775
 </td>
 </tr>
 <tr>
@@ -3281,13 +3316,13 @@ Age [2nd degree]
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5">
-495
+126
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5">
-495
+126
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="6">
-495
+126
 </td>
 </tr>
 <tr>
@@ -3298,10 +3333,10 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 0.000 / 0.000
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
-0.001 / -0.001
+0.007 / -0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="6">
-0.003 / -0.002
+0.008 / -0.008
 </td>
 </tr>
 </table>
@@ -3309,7 +3344,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <pre><code>## Bayes Factors for Model Comparison
 ## 
 ##      Model    BF
-## [m1] Age   0.064
+## [m1] Age   0.143
 ## 
 ## * Against Denominator: [m0] (Intercept only)
 ## *   Bayes Factor Type: BIC approximation</code></pre>
@@ -3317,7 +3352,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <pre><code>## Bayes Factors for Model Comparison
 ## 
 ##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.059
+## [m2] poly(Age, 2, raw = TRUE) 0.093
 ## 
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
@@ -3622,8 +3657,8 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
 </div>
-<div id="predictions-value-commitment" class="section level2" number="8.8">
-<h2><span class="header-section-number">8.8</span> predictions: value
+<div id="predictions-value-commitment" class="section level2" number="8.9">
+<h2><span class="header-section-number">8.9</span> predictions: value
 commitment</h2>
 <pre class="r"><code>#global samples
 m0 &lt;- lm(value_comm_diff ~ 1, data = df_all)
@@ -4526,9 +4561,9 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
 <pre class="r"><code>#netherlands
-m0 &lt;- lm(value_comm_diff ~ 1, data = df_all)
-m1 &lt;- lm(value_comm_diff ~ Age, data = df_all)
-m2 &lt;- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
+m0 &lt;- lm(value_comm_diff ~ 1, data = df_ne)
+m1 &lt;- lm(value_comm_diff ~ Age, data = df_ne)
+m2 &lt;- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ne)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -4604,52 +4639,52 @@ std. p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
+0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.12 – 0.06
+-0.11 – 0.25
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.09 – 0.09
+-0.18 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.537
+0.431
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
-0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
--0.19 – 0.28
+-0.43 – 0.45
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
--0.09 – 0.09
+-0.18 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-0.693
+0.974
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.12
+-0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
--0.01
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
--0.41 – 0.64
+-1.14 – 0.83
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.15 – 0.12
+-0.24 – 0.32
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.665
+0.757
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.829
+0.780
 </td>
 </tr>
 <tr>
@@ -4667,19 +4702,19 @@ Age
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
--0.03
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
--0.00 – 0.00
+-0.01 – 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
--0.12 – 0.06
+-0.15 – 0.21
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-0.485
+0.747
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
 </td>
@@ -4719,22 +4754,22 @@ Age [1st degree]
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
--0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
--0.03
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
--0.02 – 0.01
+-0.03 – 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.12 – 0.06
+-0.15 – 0.21
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.680
+0.678
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.475
+0.722
 </td>
 </tr>
 <tr>
@@ -4762,22 +4797,22 @@ Age [2nd degree]
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.00
+-0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.01
+-0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  4">
 -0.00 – 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  5">
--0.09 – 0.12
+-0.26 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  6">
-0.773
+0.717
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  7">
-0.773
+0.717
 </td>
 </tr>
 <tr>
@@ -4785,13 +4820,13 @@ Age [2nd degree]
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5">
-495
+126
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5">
-495
+126
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="6">
-495
+126
 </td>
 </tr>
 <tr>
@@ -4802,10 +4837,10 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 0.000 / 0.000
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
-0.001 / -0.001
+0.001 / -0.007
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="6">
-0.001 / -0.003
+0.002 / -0.014
 </td>
 </tr>
 </table>
@@ -4813,7 +4848,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <pre><code>## Bayes Factors for Model Comparison
 ## 
 ##      Model    BF
-## [m1] Age   0.057
+## [m1] Age   0.094
 ## 
 ## * Against Denominator: [m0] (Intercept only)
 ## *   Bayes Factor Type: BIC approximation</code></pre>
@@ -4821,7 +4856,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <pre><code>## Bayes Factors for Model Comparison
 ## 
 ##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.047
+## [m2] poly(Age, 2, raw = TRUE) 0.095
 ## 
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
@@ -5126,8 +5161,8 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 ## * Against Denominator: [m1] Age
 ## *   Bayes Factor Type: BIC approximation</code></pre>
 </div>
-<div id="exploratory-multi-level-model" class="section level2" number="8.9">
-<h2><span class="header-section-number">8.9</span> exploratory
+<div id="exploratory-multi-level-model" class="section level2" number="8.10">
+<h2><span class="header-section-number">8.10</span> exploratory
 multi-level model</h2>
 <pre class="r"><code>#define country as factor
 df_all$country &lt;- as.factor(df_all$country)
@@ -7058,6 +7093,34 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## * Against Denominator: [m1] country * Age + (1 + Age | country)
 ## *   Bayes Factor Type: BIC approximation</code></pre>
+</div>
+<div id="manipulation-checks" class="section level2" number="8.11">
+<h2><span class="header-section-number">8.11</span> manipulation
+checks</h2>
+<pre class="r"><code># do people see quality, difficulty and value of work differently
+## quality
+quality &lt;- as.data.frame(report::report(t.test(df_all$quality_lo, df_all$quality_he, paired = TRUE)))
+quality &lt;- quality %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+quality$BF &lt;- as.data.frame(ttestBF(x = df_all$quality_lo, y = df_all$quality_he, paired = TRUE))[[1]]
+
+## difficulty
+difficulty &lt;- as.data.frame(report::report(t.test(df_all$difficulty_lo, df_all$difficulty_he, paired = TRUE)))
+difficulty &lt;- difficulty %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+difficulty$BF &lt;- as.data.frame(ttestBF(x = df_all$difficulty_lo, y = df_all$difficulty_he, paired = TRUE))[[1]]
+
+##value
+valuable &lt;- as.data.frame(report::report(t.test(df_all$valuable_lo, df_all$valuable_he, paired = TRUE)))
+valuable &lt;- valuable %&gt;% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
+valuable$BF &lt;- as.data.frame(ttestBF(x = df_all$valuable_lo, y = df_all$valuable_he, paired = TRUE))[[1]]
+
+name_check &lt;- c(&quot;quality&quot;, &quot;difficulty&quot;, &quot;value&quot;)
+
+checks &lt;- rbind(quality, difficulty, valuable)
+
+checks$dimensions &lt;- name_check
+
+checks &lt;- checks %&gt;%
+    mutate_if(is.numeric, round, digits = 3)</code></pre>
 </div>
 </div>
 
