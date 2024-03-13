@@ -370,12 +370,15 @@ comp_results <- bind_rows(cg_results,
 samples <- c("global","germany","mexico","netherlands","south_africa")
 comp_results$countries <- rep(samples,5)
 
+#log-transform BFs
+comp_results$BF <- log(comp_results$BF)
+
 comp_results <- comp_results %>% #rounds all numeric variables to 3 decimals
   mutate_if(is.numeric, round, digits = 3)
 
 #this makes the transfer to word easier
 ##open excel, find/replace comma with point, copy, paste, correct format
-#writexl::write_xlsx(comp_results, "t-results.xlsx")
+writexl::write_xlsx(comp_results, "t-results.xlsx")
 
 #remove non-needed objects
 rm(list = c("cg_results","vc_results","pd_results","wa_results","co_results","samples"))
@@ -450,8 +453,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #germany
 m0 <- lm(core_good_diff ~ 1, data = df_ge)
@@ -460,8 +466,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #mexico
 m0 <- lm(core_good_diff ~ 1, data = df_me)
@@ -470,8 +479,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #netherlands
 m0 <- lm(core_good_diff ~ 1, data = df_ne)
@@ -480,8 +492,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_ne)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #south africa
 m0 <- lm(core_good_diff ~ 1, data = df_sa)
@@ -490,8 +505,11 @@ m2 <- lm(core_good_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 ```
 
 ## predictions: value commitment
@@ -504,8 +522,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_all)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #germany
 m0 <- lm(value_comm_diff ~ 1, data = df_ge)
@@ -514,8 +535,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #mexico
 m0 <- lm(value_comm_diff ~ 1, data = df_me)
@@ -524,8 +548,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_me)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #netherlands
 m0 <- lm(value_comm_diff ~ 1, data = df_ne)
@@ -534,8 +561,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ne)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 
 #south africa
 m0 <- lm(value_comm_diff ~ 1, data = df_sa)
@@ -544,8 +574,11 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_sa)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
+bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])
+log(bf2[[3]])
 ```
 
 ## exploratory multi-level model
