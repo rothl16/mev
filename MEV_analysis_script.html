@@ -1595,9 +1595,9 @@ df_me &lt;- preparation(df_me)
 df_ne &lt;- preparation(df_ne)
 df_sa &lt;- preparation(df_sa)</code></pre>
 </div>
-<div id="create-differences-scores" class="section level2" number="5.2">
+<div id="create-differences-scores-exclude-by-effort" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> create differences
-scores</h2>
+scores (exclude by effort)</h2>
 <p>this also filters out participants who thought that the low effort
 condition was more/equally effortful than the high effort condition</p>
 <pre class="r"><code>#apply function to dataframes
@@ -2075,6 +2075,9 @@ comp_results &lt;- bind_rows(cg_results,
 samples &lt;- c(&quot;global&quot;,&quot;germany&quot;,&quot;mexico&quot;,&quot;netherlands&quot;,&quot;south_africa&quot;)
 comp_results$countries &lt;- rep(samples,5)
 
+#log-transform BFs
+comp_results$BF &lt;- log(comp_results$BF)
+
 comp_results &lt;- comp_results %&gt;% #rounds all numeric variables to 3 decimals
   mutate_if(is.numeric, round, digits = 3)
 
@@ -2440,22 +2443,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.064
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.059
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.755358</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -2.825447</code></pre>
 <pre class="r"><code>#germany
 m0 &lt;- lm(core_good_diff ~ 1, data = df_ge)
 m1 &lt;- lm(core_good_diff ~ Age, data = df_ge)
@@ -2740,22 +2734,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.096
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                      BF
-## [m2] poly(Age, 2, raw = TRUE) 1.06
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.348188</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]         NA 0.05557759</code></pre>
 <pre class="r"><code>#mexico
 m0 &lt;- lm(core_good_diff ~ 1, data = df_me)
 m1 &lt;- lm(core_good_diff ~ Age, data = df_me)
@@ -3040,22 +3025,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.164
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.098
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -1.806738</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]       NA -2.32123</code></pre>
 <pre class="r"><code>#netherlands
 m0 &lt;- lm(core_good_diff ~ 1, data = df_ne)
 m1 &lt;- lm(core_good_diff ~ Age, data = df_ne)
@@ -3340,22 +3316,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.143
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.093
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -1.947838</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -2.376073</code></pre>
 <pre class="r"><code>#south africa
 m0 &lt;- lm(core_good_diff ~ 1, data = df_sa)
 m1 &lt;- lm(core_good_diff ~ Age, data = df_sa)
@@ -3640,22 +3607,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.341
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.092
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -1.076422</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -2.388594</code></pre>
 </div>
 <div id="predictions-value-commitment" class="section level2" number="8.9">
 <h2><span class="header-section-number">8.9</span> predictions: value
@@ -3944,22 +3902,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.057
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.047
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.857646</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -3.060483</code></pre>
 <pre class="r"><code>#germany
 m0 &lt;- lm(value_comm_diff ~ 1, data = df_ge)
 m1 &lt;- lm(value_comm_diff ~ Age, data = df_ge)
@@ -4244,22 +4193,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.122
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.121
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.100526</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -2.109874</code></pre>
 <pre class="r"><code>#mexico
 m0 &lt;- lm(value_comm_diff ~ 1, data = df_me)
 m1 &lt;- lm(value_comm_diff ~ Age, data = df_me)
@@ -4544,22 +4484,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.115
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.137
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.161925</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -1.989147</code></pre>
 <pre class="r"><code>#netherlands
 m0 &lt;- lm(value_comm_diff ~ 1, data = df_ne)
 m1 &lt;- lm(value_comm_diff ~ Age, data = df_ne)
@@ -4844,22 +4775,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.094
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.095
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.365137</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]       NA -2.35064</code></pre>
 <pre class="r"><code>#south africa
 m0 &lt;- lm(value_comm_diff ~ 1, data = df_sa)
 m1 &lt;- lm(value_comm_diff ~ Age, data = df_sa)
@@ -5144,22 +5066,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::test_bf(m0, m1) #BF linear vs. null model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model    BF
-## [m1] Age   0.100
-## 
-## * Against Denominator: [m0] (Intercept only)
-## *   Bayes Factor Type: BIC approximation</code></pre>
-<pre class="r"><code>performance::test_bf(m1, m2) #BF quadratic vs linear model</code></pre>
-<pre><code>## Bayes Factors for Model Comparison
-## 
-##      Model                       BF
-## [m2] poly(Age, 2, raw = TRUE) 0.093
-## 
-## * Against Denominator: [m1] Age
-## *   Bayes Factor Type: BIC approximation</code></pre>
+<pre class="r"><code>bf1 &lt;- performance::test_bf(m0, m1) #BF linear vs. null model
+bf2 &lt;- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
+log(bf1[[3]])</code></pre>
+<pre><code>## [1]        NA -2.306426</code></pre>
+<pre class="r"><code>log(bf2[[3]])</code></pre>
+<pre><code>## [1]        NA -2.380015</code></pre>
 </div>
 <div id="exploratory-multi-level-model" class="section level2" number="8.10">
 <h2><span class="header-section-number">8.10</span> exploratory

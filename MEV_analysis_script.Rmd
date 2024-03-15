@@ -77,7 +77,7 @@ df_ne <- preparation(df_ne)
 df_sa <- preparation(df_sa)
 ```
 
-## create differences scores
+## create differences scores (exclude by effort)
 this also filters out participants who thought that the low effort condition was more/equally effortful than the high effort condition
 ```{r}
 #apply function to dataframes
@@ -378,7 +378,7 @@ comp_results <- comp_results %>% #rounds all numeric variables to 3 decimals
 
 #this makes the transfer to word easier
 ##open excel, find/replace comma with point, copy, paste, correct format
-writexl::write_xlsx(comp_results, "t-results.xlsx")
+#writexl::write_xlsx(comp_results, "t-results.xlsx")
 
 #remove non-needed objects
 rm(list = c("cg_results","vc_results","pd_results","wa_results","co_results","samples"))
