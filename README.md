@@ -11,3 +11,7 @@ This way, the data seems to be exported in the most convenient and parsimonious 
 
 # running script
 you actually don't have to run the functions_run_first.R script first anymore, as it is sourced through the .Rmd script
+
+# anonymity
+we removed some columns with personal data from the raw data and connected the dataframes
+this information is saved locally with the authors

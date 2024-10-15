@@ -35,7 +35,7 @@ library(patchwork)
 ```
 
 # TODOs
-add here, if something comes up
+change low and high effort!
 
 # source functions from script
 this 'runs' the script functions_run_first.R and saves work to do it yourself/otherwise can't knit (create markdown)
@@ -46,8 +46,8 @@ source("functions_run_first.R", local = knitr::knit_global())
 #load data
 
 ```{r}
-df_ge <- read_csv("testdata/testdata_mev_GE.csv") #Germany
-df_me <- read_csv("testdata/testdata_mev_ME.csv") #Mexico
+df_ge <- read_csv("data/anonymized/df_ge.csv") #Germany
+df_me <- read_csv("data/anonymized/df_me.csv") #Mexico
 ```
 
 # apply exclusion criteria
@@ -58,8 +58,8 @@ df_me <- read_csv("testdata/testdata_mev_ME.csv") #Mexico
 - too fast completion (> 3SD from mean)
 ```{r}
 #apply data cleaning function (CURRENTLY DEACTIVATED; BECAUSE RESPONSES ARE RANDOM)
-# df_ge <- clean_data(df_ge)
-# df_me <- clean_data(df_me)
+df_ge <- clean_data(df_ge)
+df_me <- clean_data(df_me)
 ```
 
 # prepare data
@@ -447,6 +447,13 @@ m2 <- lm(value_comm_diff ~ poly(Age,2,raw=TRUE), data = df_ge)
 
 sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
+plot(df_ge$Age, df_ge$value_comm_diff)
+
+df_ge %>%
+  ggplot(aes(x = Age, y = value_comm_diff)) +
+    geom_smooth(method = "lm") +
+  geom_point()
+
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
@@ -525,7 +532,10 @@ checks$dimensions <- name_check
 
 checks <- checks %>%
     mutate_if(is.numeric, round, digits = 3)
+
+boxplot(df_all$difficulty_lo, df_all$difficulty_he)
 ```
+
 
 
 

@@ -1,0 +1,58 @@
+---
+title: "anonymizer"
+author: "Leopold Roth"
+date: "2024-10-01"
+output: html_document
+---
+
+# packages
+```{r}
+library(readr)
+library(dplyr)
+```
+
+# german data
+```{r}
+GE_besample <- read_csv("data/non-anonymized/GE_besample.csv")
+GE_prolific <- read_csv("data/non-anonymized/GE_prolific.csv")
+GE_social_media <- read_csv("data/non-anonymized/GE_social_media.csv")
+```
+
+# assimilate dfs Germany
+```{r}
+GE_besample <- GE_besample %>%
+  select(-c("Q_RecaptchaScore", "response_id", "assignment_id", "besample_id","completion_code"))
+
+GE_prolific <- GE_prolific %>%
+  select(-Prolific_ID)
+
+df_1 <- rbind(GE_besample, GE_prolific)
+
+GE_social_media <- GE_social_media %>%
+  select(-Q_RecaptchaScore)
+
+df_ge <- rbind(df_1, GE_social_media)
+write.csv(df_ge,"df_ge.csv")
+```
+
+# Mexican data
+```{r}
+MX_besample <- read_csv("data/non-anonymized/MX_besample.csv")
+MX_prolific <- read_csv("data/non-anonymized/MX_prolific.csv")
+```
+
+# assimilate dfs Mexico
+```{r}
+MX_besample <- MX_besample %>%
+  select(-c("Q_RecaptchaScore", "response_id", "assignment_id", "besample_id","completion_code"))
+
+MX_prolific <- MX_prolific %>%
+  select(-ProlificID)
+
+
+df_me <- rbind(MX_besample, MX_prolific)
+write.csv(df_me,"df_me.csv")
+```
+
+
+
