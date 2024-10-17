@@ -32,6 +32,7 @@ library(haven)
 library(BayesFactor)
 library(stringr)
 library(patchwork)
+library(ggpubr)
 ```
 
 # TODOs
@@ -180,19 +181,19 @@ means_me <- rownames_as_column(psych::describe(df_me))
 
 ```{r}
 #all
-cg_all <- as.data.frame(report::report(t.test(df_all$core_good_lo, df_all$core_good_he, paired = TRUE))) #this computes the paired t-test and saves the results as dataframe
+cg_all <- as.data.frame(report::report(t.test(df_all$core_good_he, df_all$core_good_lo, paired = TRUE))) #this computes the paired t-test and saves the results as dataframe
 cg_all <- cg_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high) #this extracts the metrices of interest and binds them together
-cg_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_lo, y = df_all$core_good_he, paired = TRUE))[[1]] #this computes the Bayes Factor of the test and binds it to the other data; this is done for all tests in the same manner
+cg_all$BF <- as.data.frame(ttestBF(x = df_all$core_good_he, y = df_all$core_good_lo, paired = TRUE))[[1]] #this computes the Bayes Factor of the test and binds it to the other data; this is done for all tests in the same manner
 
 #Germany
-cg_ge <- as.data.frame(report::report(t.test(df_ge$core_good_lo, df_ge$core_good_he, paired = TRUE)))
+cg_ge <- as.data.frame(report::report(t.test(df_ge$core_good_he, df_ge$core_good_lo, paired = TRUE)))
 cg_ge <- cg_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_lo, y = df_ge$core_good_he, paired = TRUE))[[1]]
+cg_ge$BF <- as.data.frame(ttestBF(x = df_ge$core_good_he, y = df_ge$core_good_lo, paired = TRUE))[[1]]
 
 #Mexico
-cg_me <- as.data.frame(report::report(t.test(df_me$core_good_lo, df_me$core_good_he, paired = TRUE)))
+cg_me <- as.data.frame(report::report(t.test(df_me$core_good_he, df_me$core_good_lo, paired = TRUE)))
 cg_me <- cg_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-cg_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_lo, y = df_me$core_good_he, paired = TRUE))[[1]]
+cg_me$BF <- as.data.frame(ttestBF(x = df_me$core_good_he, y = df_me$core_good_lo, paired = TRUE))[[1]]
 
 #combine results
 cg_results <- bind_rows(cg_all, cg_ge, cg_me) #using more flexible dplyr function; rbind had trouble with row.names
@@ -204,19 +205,19 @@ rm(list=c("cg_all","cg_ge","cg_me")) #removes non-needed dfs
 
 ```{r}
 #all
-vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_lo, df_all$value_comm_he, paired = TRUE)))
+vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_he, df_all$value_comm_lo, paired = TRUE)))
 vc_all <- vc_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_all$BF <- as.data.frame(ttestBF(x = df_all$value_comm_lo, y = df_all$value_comm_he, paired = TRUE))[[1]]
+vc_all$BF <- as.data.frame(ttestBF(x = df_all$value_comm_he, y = df_all$value_comm_lo, paired = TRUE))[[1]]
 
 #Germany
-vc_ge <- as.data.frame(report::report(t.test(df_ge$value_comm_lo, df_ge$value_comm_he, paired = TRUE)))
+vc_ge <- as.data.frame(report::report(t.test(df_ge$value_comm_he, df_ge$value_comm_lo, paired = TRUE)))
 vc_ge <- vc_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_ge$BF <- as.data.frame(ttestBF(x = df_ge$value_comm_lo, y = df_ge$value_comm_he, paired = TRUE))[[1]]
+vc_ge$BF <- as.data.frame(ttestBF(x = df_ge$value_comm_he, y = df_ge$value_comm_lo, paired = TRUE))[[1]]
 
 #Mexico
-vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_lo, df_me$value_comm_he, paired = TRUE)))
+vc_me <- as.data.frame(report::report(t.test(df_me$value_comm_he, df_me$value_comm_lo, paired = TRUE)))
 vc_me <- vc_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-vc_me$BF <- as.data.frame(ttestBF(x = df_me$value_comm_lo, y = df_me$value_comm_he, paired = TRUE))[[1]]
+vc_me$BF <- as.data.frame(ttestBF(x = df_me$value_comm_he, y = df_me$value_comm_lo, paired = TRUE))[[1]]
 
 #combine results
 vc_results <- bind_rows(vc_all, vc_ge, vc_me)
@@ -228,19 +229,19 @@ rm(list=c("vc_all","vc_ge","vc_me")) #removes non-needed dfs
 
 ```{r}
 #all
-pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_lo, df_all$pay_deservingness_he, paired = TRUE)))
+pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_he, df_all$pay_deservingness_lo, paired = TRUE)))
 pd_all <- pd_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_all$BF <- as.data.frame(ttestBF(x = df_all$pay_deservingness_lo, y = df_all$pay_deservingness_he, paired = TRUE))[[1]]
+pd_all$BF <- as.data.frame(ttestBF(x = df_all$pay_deservingness_he, y = df_all$pay_deservingness_lo, paired = TRUE))[[1]]
 
 #Germany
-pd_ge <- as.data.frame(report::report(t.test(df_ge$pay_deservingness_lo, df_ge$pay_deservingness_he, paired = TRUE)))
+pd_ge <- as.data.frame(report::report(t.test(df_ge$pay_deservingness_he, df_ge$pay_deservingness_lo, paired = TRUE)))
 pd_ge <- pd_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_ge$BF <- as.data.frame(ttestBF(x = df_ge$pay_deservingness_lo, y = df_ge$pay_deservingness_he, paired = TRUE))[[1]]
+pd_ge$BF <- as.data.frame(ttestBF(x = df_ge$pay_deservingness_he, y = df_ge$pay_deservingness_lo, paired = TRUE))[[1]]
 
 #Mexico
-pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_lo, df_me$pay_deservingness_he, paired = TRUE)))
+pd_me <- as.data.frame(report::report(t.test(df_me$pay_deservingness_he, df_me$pay_deservingness_lo, paired = TRUE)))
 pd_me <- pd_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-pd_me$BF <- as.data.frame(ttestBF(x = df_me$pay_deservingness_lo, y = df_me$pay_deservingness_he, paired = TRUE))[[1]]
+pd_me$BF <- as.data.frame(ttestBF(x = df_me$pay_deservingness_he, y = df_me$pay_deservingness_lo, paired = TRUE))[[1]]
 
 #combine results
 pd_results <- bind_rows(pd_all, pd_ge, pd_me)
@@ -252,19 +253,19 @@ rm(list=c("pd_all","pd_ge","pd_me")) #removes non-needed dfs
 
 ```{r}
 #all
-wa_all <- as.data.frame(report::report(t.test(df_all$warmth_lo, df_all$warmth_he, paired = TRUE)))
+wa_all <- as.data.frame(report::report(t.test(df_all$warmth_he, df_all$warmth_lo, paired = TRUE)))
 wa_all <- wa_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_all$BF <- as.data.frame(ttestBF(x = df_all$warmth_lo, y = df_all$warmth_he, paired = TRUE))[[1]]
+wa_all$BF <- as.data.frame(ttestBF(x = df_all$warmth_he, y = df_all$warmth_lo, paired = TRUE))[[1]]
 
 #Germany
-wa_ge <- as.data.frame(report::report(t.test(df_ge$warmth_lo, df_ge$warmth_he, paired = TRUE)))
+wa_ge <- as.data.frame(report::report(t.test(df_ge$warmth_he, df_ge$warmth_lo, paired = TRUE)))
 wa_ge <- wa_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_ge$BF <- as.data.frame(ttestBF(x = df_ge$warmth_lo, y = df_ge$warmth_he, paired = TRUE))[[1]]
+wa_ge$BF <- as.data.frame(ttestBF(x = df_ge$warmth_he, y = df_ge$warmth_lo, paired = TRUE))[[1]]
 
 #Mexico
-wa_me <- as.data.frame(report::report(t.test(df_me$warmth_lo, df_me$warmth_he, paired = TRUE)))
+wa_me <- as.data.frame(report::report(t.test(df_me$warmth_he, df_me$warmth_lo, paired = TRUE)))
 wa_me <- wa_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-wa_me$BF <- as.data.frame(ttestBF(x = df_me$warmth_lo, y = df_me$warmth_he, paired = TRUE))[[1]]
+wa_me$BF <- as.data.frame(ttestBF(x = df_me$warmth_he, y = df_me$warmth_lo, paired = TRUE))[[1]]
 
 #combine results
 wa_results <- bind_rows(wa_all, wa_ge, wa_me)
@@ -276,19 +277,19 @@ rm(list=c("wa_all","wa_ge","wa_me")) #removes non-needed dfs
 
 ```{r}
 #all
-co_all <- as.data.frame(report::report(t.test(df_all$competence_lo, df_all$competence_he, paired = TRUE)))
+co_all <- as.data.frame(report::report(t.test(df_all$competence_he, df_all$competence_lo, paired = TRUE)))
 co_all <- co_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_all$BF <- as.data.frame(ttestBF(x = df_all$competence_lo, y = df_all$competence_he, paired = TRUE))[[1]]
+co_all$BF <- as.data.frame(ttestBF(x = df_all$competence_he, y = df_all$competence_lo, paired = TRUE))[[1]]
 
 #Germany
-co_ge <- as.data.frame(report::report(t.test(df_ge$competence_lo, df_ge$competence_he, paired = TRUE)))
+co_ge <- as.data.frame(report::report(t.test(df_ge$competence_he, df_ge$competence_lo, paired = TRUE)))
 co_ge <- co_ge %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_ge$BF <- as.data.frame(ttestBF(x = df_ge$competence_lo, y = df_ge$competence_he, paired = TRUE))[[1]]
+co_ge$BF <- as.data.frame(ttestBF(x = df_ge$competence_he, y = df_ge$competence_lo, paired = TRUE))[[1]]
 
 #Mexico
-co_me <- as.data.frame(report::report(t.test(df_me$competence_lo, df_me$competence_he, paired = TRUE)))
+co_me <- as.data.frame(report::report(t.test(df_me$competence_he, df_me$competence_lo, paired = TRUE)))
 co_me <- co_me %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-co_me$BF <- as.data.frame(ttestBF(x = df_me$competence_lo, y = df_me$competence_he, paired = TRUE))[[1]]
+co_me$BF <- as.data.frame(ttestBF(x = df_me$competence_he, y = df_me$competence_lo, paired = TRUE))[[1]]
 
 #combine results
 co_results <- bind_rows(co_all, co_ge, co_me)
@@ -366,15 +367,15 @@ df_plot <- df_plot %>% #recode country for readbility
   ))
 
 #apply function for restructuring and plotting data
-plot_cg <- plot_violin_with_means(df_plot, c("core_good_lo", "core_good_he"), "core goodness")
+plot_cg <- plot_violin_with_means(df_plot, c("core_good_he", "core_good_lo"), "core goodness")
 
-plot_vc <- plot_violin_with_means(df_plot, c("value_comm_lo", "value_comm_he"), "value commitment")
+plot_vc <- plot_violin_with_means(df_plot, c("value_comm_he", "value_comm_lo"), "value commitment")
 
-plot_pd <- plot_violin_with_means(df_plot, c("pay_deservingness_lo", "pay_deservingness_he"),"pay deservingness")
+plot_pd <- plot_violin_with_means(df_plot, c("pay_deservingness_he", "pay_deservingness_lo"),"pay deservingness")
 
-plot_wa <- plot_violin_with_means(df_plot, c("warmth_lo", "warmth_he"), "warmth")
+plot_wa <- plot_violin_with_means(df_plot, c("warmth_he", "warmth_lo"), "warmth")
 
-plot_co <- plot_violin_with_means(df_plot, c("competence_lo", "competence_he"), "competence")
+plot_co <- plot_violin_with_means(df_plot, c("competence_he", "competence_lo"), "competence")
 
 combined_plot <- plot_cg / plot_vc / plot_pd / plot_wa / plot_co #combine plots
 
@@ -449,14 +450,9 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 
 plot(df_ge$Age, df_ge$value_comm_diff)
 
-df_ge %>%
-  ggplot(aes(x = Age, y = value_comm_diff)) +
-    geom_smooth(method = "lm") +
-  geom_point()
-
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
-
+bf1[[3]]
 log(bf1[[3]])
 log(bf2[[3]])
 
@@ -472,6 +468,38 @@ bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
 log(bf1[[3]])
 log(bf2[[3]])
+```
+
+## plot predictions
+
+```{r}
+new_labels <- c("GE" = "Germany", "ME" = "Mexico")
+
+plot_core <- df_all %>%
+  ggplot(aes(x = Age, y = core_good_diff)) +
+    geom_smooth(method = "lm") +
+    facet_wrap(~country, labeller = labeller(country = new_labels)) + 
+    geom_point() +
+    ylab("Δ core goodness") +
+    ylim(-6,6) +
+    theme_classic(base_size = 25)
+
+plot_value <- df_all %>%
+  ggplot(aes(x = Age, y = value_comm_diff)) +
+    geom_smooth(method = "lm") +
+    facet_wrap(~country, labeller = labeller(country = new_labels)) + 
+    geom_point() +
+    ylab("Δ value commitment") +
+    ylim(-6,6) +
+    theme_classic(base_size = 25)
+
+plot_comb_effects <-ggarrange(plot_core, plot_value,
+                              font.label = list(size = 25),
+                             labels = c("A", "B"),ncol = 1, nrow =2,common.legend = FALSE)
+
+
+plot_comb_effects %>%
+ggsave(filename="combined_plot_predictions.jpg",width = 11, height = 9)
 ```
 
 ## exploratory multi-level model
@@ -508,21 +536,22 @@ performance::test_bf(m1, m2) #BF quadratic vs linear model
 ## manipulation checks
 
 ```{r}
+options(scipen = 999)
 # do people see quality, difficulty and value of work differently
 ## quality
-quality <- as.data.frame(report::report(t.test(df_all$quality_lo, df_all$quality_he, paired = TRUE)))
+quality <- as.data.frame(report::report(t.test(df_all$quality_he, df_all$quality_lo, paired = TRUE)))
 quality <- quality %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-quality$BF <- as.data.frame(ttestBF(x = df_all$quality_lo, y = df_all$quality_he, paired = TRUE))[[1]]
+quality$BF <- as.data.frame(ttestBF(x = df_all$quality_he, y = df_all$quality_lo, paired = TRUE))[[1]]
 
 ## difficulty
-difficulty <- as.data.frame(report::report(t.test(df_all$difficulty_lo, df_all$difficulty_he, paired = TRUE)))
+difficulty <- as.data.frame(report::report(t.test(df_all$difficulty_he, df_all$difficulty_lo, paired = TRUE)))
 difficulty <- difficulty %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-difficulty$BF <- as.data.frame(ttestBF(x = df_all$difficulty_lo, y = df_all$difficulty_he, paired = TRUE))[[1]]
+difficulty$BF <- as.data.frame(ttestBF(x = df_all$difficulty_he, y = df_all$difficulty_lo, paired = TRUE))[[1]]
 
 ##value
-valuable <- as.data.frame(report::report(t.test(df_all$valuable_lo, df_all$valuable_he, paired = TRUE)))
+valuable <- as.data.frame(report::report(t.test(df_all$valuable_he, df_all$valuable_lo, paired = TRUE)))
 valuable <- valuable %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
-valuable$BF <- as.data.frame(ttestBF(x = df_all$valuable_lo, y = df_all$valuable_he, paired = TRUE))[[1]]
+valuable$BF <- as.data.frame(ttestBF(x = df_all$valuable_he, y = df_all$valuable_lo, paired = TRUE))[[1]]
 
 name_check <- c("quality", "difficulty", "value")
 
@@ -533,7 +562,7 @@ checks$dimensions <- name_check
 checks <- checks %>%
     mutate_if(is.numeric, round, digits = 3)
 
-boxplot(df_all$difficulty_lo, df_all$difficulty_he)
+boxplot(df_all$difficulty_he, df_all$difficulty_lo)
 ```
 
 
