@@ -117,3 +117,44 @@ plot_violin_with_means <- function(data, columns_to_pivot, y_label, plot_title =
           strip.text = element_text(size = 14, color = "black"))
   return(p)
 }
+
+
+plot_with_means <- function(data, columns_to_pivot, y_label, plot_title = "") {
+  # Pivot the data
+  df_long <- pivot_longer(data, cols = columns_to_pivot, names_to = "group", values_to = "value")
+  
+  # Recode group based on '_he' and '_lo'
+  df_long <- df_long %>%
+    mutate(group = case_when(
+      str_detect(group, "_he$") ~ "high",
+      str_detect(group, "_lo$") ~ "low",
+      TRUE ~ group  # Keeps the original value if none of the conditions match
+    ))
+  
+  # Calculate the mean values for each group and country
+  means_df <- df_long %>%
+    group_by(country, group) %>%
+    summarise(mean_value = mean(value), .groups = "drop")
+  
+  y_min <- as.numeric(min(df_long$value))
+  y_max <- as.numeric(max(df_long$value))
+  
+  # Plot
+  p <- ggplot(df_long, aes(x = group, y = value, fill = group)) +
+    geom_point(position = "jitter", alpha = .1, stat = "identity") +
+    geom_point(data = means_df, aes(x = group, y = mean_value, group = group), color = "black", size = 14, shape = 95) +
+    facet_grid(~country) +
+    theme_classic() +
+    labs(y = y_label, x = "", title = plot_title) +
+    ylim(y_min,y_max) +
+    theme(legend.position = "none",
+          text = element_text(size = 20, color = "black"), # Base text size for the plot, increases all text size
+          axis.title = element_text(size = 20, color = "black"), # Axis titles
+          axis.text = element_text(size = 20, color = "black"), # Axis text (ticks)
+          plot.title = element_text(size = 20, color = "black", face = "bold"), # Plot title
+          strip.text = element_text(size = 20, color = "black"))
+  return(p)
+}
+
+
+

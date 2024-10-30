@@ -36,34 +36,41 @@ library(ggpubr)
 ```
 
 # TODOs
+
 change low and high effort!
 
 # source functions from script
+
 this 'runs' the script functions_run_first.R and saves work to do it yourself/otherwise can't knit (create markdown)
+
 ```{r, include=FALSE}
 source("functions_run_first.R", local = knitr::knit_global())
 ```
 
 #load data
 
-```{r}
+```{r, message = FALSE}
+options(scipen=999) # turn off mathemtaical notation
 df_ge <- read_csv("data/anonymized/df_ge.csv") #Germany
 df_me <- read_csv("data/anonymized/df_me.csv") #Mexico
 ```
 
 # apply exclusion criteria
-- didnt complete survey
-- language level < very good (x)
-- not resident in target country (x)
-- missed one of the two attention checks
-- too fast completion (> 3SD from mean)
+
+-   didnt complete survey
+-   language level \< very good (x)
+-   not resident in target country (x)
+-   missed one of the two attention checks
+-   too fast completion (\> 3SD from mean)
+
 ```{r}
-#apply data cleaning function (CURRENTLY DEACTIVATED; BECAUSE RESPONSES ARE RANDOM)
+#apply data cleaning function
 df_ge <- clean_data(df_ge)
 df_me <- clean_data(df_me)
 ```
 
 # prepare data
+
 ## renaming and means
 
 ```{r}
@@ -73,7 +80,9 @@ df_me <- preparation(df_me)
 ```
 
 ## create differences scores (exclude by effort)
+
 this also filters out participants who thought that the low effort condition was more/equally effortful than the high effort condition
+
 ```{r}
 #apply function to dataframes
 df_ge <- difference_scores(df_ge)
@@ -81,7 +90,9 @@ df_me <- difference_scores(df_me)
 ```
 
 # reliabilities
+
 ## core goodness
+
 ### low effort
 
 ```{r}
@@ -113,6 +124,7 @@ psych::omega(df_me %>% select(c(Ch_HiEf_3, Ch_HiEf_9, Ch_HiEf_11, Ch_HiEf_10, Ch
 ```
 
 ## value commitment
+
 ### low effort
 
 ```{r}
@@ -136,6 +148,7 @@ psych::omega(df_me %>% select(c(Ch_HiEf_1, Ch_HiEf_5, Ch_HiEf_15, Ch_HiEf_8, Ch_
 ```
 
 # prepare analysis
+
 ## keep needed columns
 
 ```{r}
@@ -169,7 +182,9 @@ table(df_all$Gen)
 ```
 
 ## descriptive: means
+
 get all descriptives of everything and filter for what is needed
+
 ```{r}
 means_all <- rownames_as_column(psych::describe(df_all))
 means_ge <- rownames_as_column(psych::describe(df_ge))
@@ -177,9 +192,10 @@ means_me <- rownames_as_column(psych::describe(df_me))
 ```
 
 # main analysis
+
 ## comparisons: core goodness
 
-```{r}
+```{r, message = FALSE}
 #all
 cg_all <- as.data.frame(report::report(t.test(df_all$core_good_he, df_all$core_good_lo, paired = TRUE))) #this computes the paired t-test and saves the results as dataframe
 cg_all <- cg_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high) #this extracts the metrices of interest and binds them together
@@ -203,7 +219,7 @@ rm(list=c("cg_all","cg_ge","cg_me")) #removes non-needed dfs
 
 ## comparisons: value commitment
 
-```{r}
+```{r, message = FALSE}
 #all
 vc_all <- as.data.frame(report::report(t.test(df_all$value_comm_he, df_all$value_comm_lo, paired = TRUE)))
 vc_all <- vc_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
@@ -227,7 +243,7 @@ rm(list=c("vc_all","vc_ge","vc_me")) #removes non-needed dfs
 
 ## comparisons: pay deservingness
 
-```{r}
+```{r, message = FALSE}
 #all
 pd_all <- as.data.frame(report::report(t.test(df_all$pay_deservingness_he, df_all$pay_deservingness_lo, paired = TRUE)))
 pd_all <- pd_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
@@ -251,7 +267,7 @@ rm(list=c("pd_all","pd_ge","pd_me")) #removes non-needed dfs
 
 ## comparisons: warmth
 
-```{r}
+```{r, message = FALSE}
 #all
 wa_all <- as.data.frame(report::report(t.test(df_all$warmth_he, df_all$warmth_lo, paired = TRUE)))
 wa_all <- wa_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
@@ -275,7 +291,7 @@ rm(list=c("wa_all","wa_ge","wa_me")) #removes non-needed dfs
 
 ## comparisons: competence
 
-```{r}
+```{r, message = FALSE}
 #all
 co_all <- as.data.frame(report::report(t.test(df_all$competence_he, df_all$competence_lo, paired = TRUE)))
 co_all <- co_all %>% select(p, Cohens_d, Cohens_d_CI_low, Cohens_d_CI_high)
@@ -311,8 +327,8 @@ comp_results <- bind_rows(cg_results,
 samples <- c("global","germany","mexico")
 comp_results$countries <- rep(samples,5)
 
-#log-transform BFs
-comp_results$BF <- log(comp_results$BF)
+#log-transform BFs (decided against it, because hard to understand)
+#comp_results$BF <- log(comp_results$BF)
 
 comp_results <- comp_results %>% #rounds all numeric variables to 3 decimals
   mutate_if(is.numeric, round, digits = 3)
@@ -356,7 +372,7 @@ combined_rows <- combined_rows %>%
 
 ## beeswarm plot
 
-```{r}
+```{r, message = FALSE}
 df_plot <- df_all #define df for plotting
 
 df_plot <- df_plot %>% #recode country for readbility
@@ -367,19 +383,22 @@ df_plot <- df_plot %>% #recode country for readbility
   ))
 
 #apply function for restructuring and plotting data
-plot_cg <- plot_violin_with_means(df_plot, c("core_good_he", "core_good_lo"), "core goodness")
+plot_cg <- plot_with_means(df_plot, c("core_good_he", "core_good_lo"), "core goodness")
 
-plot_vc <- plot_violin_with_means(df_plot, c("value_comm_he", "value_comm_lo"), "value commitment")
+plot_vc <- plot_with_means(df_plot, c("value_comm_he", "value_comm_lo"), "value commitment")
 
-plot_pd <- plot_violin_with_means(df_plot, c("pay_deservingness_he", "pay_deservingness_lo"),"pay deservingness")
+plot_pd <- plot_with_means(df_plot, c("pay_deservingness_he", "pay_deservingness_lo"),"pay deservingness")
 
-plot_wa <- plot_violin_with_means(df_plot, c("warmth_he", "warmth_lo"), "warmth")
+plot_wa <- plot_with_means(df_plot, c("warmth_he", "warmth_lo"), "warmth")
 
-plot_co <- plot_violin_with_means(df_plot, c("competence_he", "competence_lo"), "competence")
+plot_co <- plot_with_means(df_plot, c("competence_he", "competence_lo"), "competence")
 
 combined_plot <- plot_cg / plot_vc / plot_pd / plot_wa / plot_co #combine plots
 
-#ggsave("combined_plot.png", combined_plot, width = 10, height = 12, dpi = 300)
+ggsave("combined_plot.png", combined_plot, width = 10, height = 12, dpi = 300)
+
+combined_plot_moral <- plot_cg / plot_vc #combine plots
+ggsave("combined_plot_moral.png", combined_plot_moral, width = 8, height = 10, dpi = 300)
 ```
 
 ## predictions: core goodness
@@ -395,8 +414,10 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
-log(bf1[[3]])
-log(bf2[[3]])
+bf1[[3]]
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 
 #germany
 m0 <- lm(core_good_diff ~ 1, data = df_ge)
@@ -408,8 +429,10 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
-log(bf1[[3]])
-log(bf2[[3]])
+bf1[[3]]
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 
 #mexico
 m0 <- lm(core_good_diff ~ 1, data = df_me)
@@ -421,8 +444,10 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
-log(bf1[[3]])
-log(bf2[[3]])
+bf1[[3]]
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 ```
 
 ## predictions: value commitment
@@ -438,8 +463,10 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
-log(bf1[[3]])
-log(bf2[[3]])
+bf1[[3]]
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 
 #germany
 m0 <- lm(value_comm_diff ~ 1, data = df_ge)
@@ -452,9 +479,11 @@ plot(df_ge$Age, df_ge$value_comm_diff)
 
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
+
 bf1[[3]]
-log(bf1[[3]])
-log(bf2[[3]])
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 
 #mexico
 m0 <- lm(value_comm_diff ~ 1, data = df_me)
@@ -466,8 +495,10 @@ sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
 bf1 <- performance::test_bf(m0, m1) #BF linear vs. null model
 bf2 <- performance::test_bf(m1, m2) #BF quadratic vs linear model
 
-log(bf1[[3]])
-log(bf2[[3]])
+bf1[[3]]
+bf2[[3]]
+#log(bf1[[3]])
+#log(bf2[[3]])
 ```
 
 ## plot predictions
@@ -502,36 +533,7 @@ plot_comb_effects %>%
 ggsave(filename="combined_plot_predictions.jpg",width = 11, height = 9)
 ```
 
-## exploratory multi-level model
 
-```{r}
-#define country as factor
-df_all$country <- as.factor(df_all$country)
-
-#core goodness
-
-m0 <- lme4::lmer(core_good_diff ~ 1 + (1+Age|country), data = df_all)
-m1 <- lme4::lmer(core_good_diff ~ country * Age + (1+Age|country), data = df_all)
-m2 <- lme4::lmer(core_good_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|country), data = df_all)
-
-sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
-sjPlot::plot_model(m2)
-
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
-
-#value commitment
-
-m0 <- lme4::lmer(value_comm_diff ~ 1 + (1+Age|country), data = df_all)
-m1 <- lme4::lmer(value_comm_diff ~ country * Age + (1+Age|country), data = df_all)
-m2 <- lme4::lmer(value_comm_diff ~ country * poly(Age,2,raw=TRUE) + (1+Age|country), data = df_all)
-
-sjPlot::tab_model(m0,m1,m2, show.std = TRUE)
-sjPlot::plot_model(m2)
-
-performance::test_bf(m0, m1) #BF linear vs. null model
-performance::test_bf(m1, m2) #BF quadratic vs linear model
-```
 
 ## manipulation checks
 
@@ -564,7 +566,3 @@ checks <- checks %>%
 
 boxplot(df_all$difficulty_he, df_all$difficulty_lo)
 ```
-
-
-
-
